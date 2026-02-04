@@ -1,0 +1,115 @@
+{
+  "common": {
+    "appName": "Next-AI SaaS",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "back": "Back",
+    "submit": "Submit"
+  },
+  "nav": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "legal": "Legal",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "signup": "Sign Up",
+    "logout": "Logout"
+  },
+  "home": {
+    "title": "AI-Powered Text to Emoji",
+    "subtitle": "Transform your text into expressive emojis instantly",
+    "tryDemo": "Try the Demo",
+    "getStarted": "Get Started"
+  },
+  "demo": {
+    "title": "Text to Emoji",
+    "inputPlaceholder": "Enter a word (e.g., cat, sun, heart)...",
+    "generate": "Generate",
+    "generating": "Generating...",
+    "result": "Result",
+    "credits": "Credits",
+    "insufficientCredits": "Insufficient credits. Please upgrade your plan.",
+    "loginRequired": "Please login to use more credits",
+    "anonymousQuota": "free tries remaining today"
+  },
+  "auth": {
+    "loginTitle": "Welcome Back",
+    "loginSubtitle": "Sign in to your account",
+    "signupTitle": "Create Account",
+    "signupSubtitle": "Start your AI journey today",
+    "email": "Email",
+    "password": "Password",
+    "displayName": "Display Name",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loginButton": "Sign In",
+    "signupButton": "Create Account",
+    "loginSuccess": "Welcome back!",
+    "signupSuccess": "Account created! Please check your email.",
+    "logoutSuccess": "You have been logged out"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "subscription": {
+      "title": "Subscription",
+      "currentPlan": "Current Plan",
+      "status": "Status",
+      "upgrade": "Upgrade to Pro"
+    },
+    "entitlements": {
+      "title": "Your Benefits",
+      "monthlyCredits": "Monthly Credits",
+      "rateLimit": "Rate Limit",
+      "apiAccess": "API Access",
+      "priorityQueue": "Priority Queue",
+      "advancedModels": "Advanced Models"
+    },
+    "credits": {
+      "title": "Credits",
+      "balance": "Current Balance",
+      "totalEarned": "Total Earned",
+      "totalSpent": "Total Spent",
+      "recentActivity": "Recent Activity",
+      "noActivity": "No recent activity"
+    }
+  },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "subtitle": "Choose the plan that works for you",
+    "free": {
+      "name": "Free",
+      "price": "$0",
+      "period": "/month",
+      "description": "Get started with basic features",
+      "cta": "Get Started"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "$19",
+      "period": "/month",
+      "description": "Unlock full potential",
+      "cta": "Upgrade Now"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions"
+  },
+  "legal": {
+    "title": "Legal",
+    "termsTitle": "Terms of Service",
+    "privacyTitle": "Privacy Policy"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "unauthorized": "Please login to continue.",
+    "insufficientCredits": "Insufficient credits.",
+    "rateLimitExceeded": "Rate limit exceeded. Please try again later."
+  }
+}
