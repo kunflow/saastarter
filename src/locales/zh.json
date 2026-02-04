@@ -1,6 +1,5 @@
 {
   "common": {
-    "appName": "Next-AI SaaS",
     "loading": "加载中...",
     "error": "发生错误",
     "retry": "重试",

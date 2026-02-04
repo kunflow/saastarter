@@ -1,6 +1,5 @@
 {
   "common": {
-    "appName": "Next-AI SaaS",
     "loading": "Loading...",
     "error": "An error occurred",
     "retry": "Retry",

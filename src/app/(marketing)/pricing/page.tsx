@@ -1,12 +1,15 @@
 import { Metadata } from 'next'
 import PricingContent from './pricing-content'
+import { seoConfig } from '@/config/seo'
+
+const { title, description } = seoConfig.pages.pricing
 
 export const metadata: Metadata = {
-  title: 'Pricing',
-  description: 'Simple, transparent pricing. Choose the plan that works for you.',
+  title,
+  description,
   openGraph: {
-    title: 'Pricing',
-    description: 'Simple, transparent pricing. Choose the plan that works for you.',
+    title,
+    description,
   },
 }
 

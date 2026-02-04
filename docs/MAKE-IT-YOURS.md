@@ -6,48 +6,94 @@ Transform this template into your own product in about 2 hours.
 
 This guide walks you through customizing the template for your specific AI product. By the end, you'll have a fully branded, functional AI SaaS.
 
-## Step 1: Brand Configuration (15 min)
+## Step 1: Brand & SEO Configuration (10 min)
 
-### 1.1 App Name and URL
+### 1.1 Site Configuration
 
-Edit `src/config/env.ts`:
+Edit `src/config/site.ts`:
 
 ```typescript
-app: {
-  url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com',
-  name: process.env.NEXT_PUBLIC_APP_NAME || 'Your Product Name',
-  // ...
+export const siteConfig = {
+  // Brand
+  brand: {
+    name: process.env.NEXT_PUBLIC_APP_NAME || 'Your Product Name',
+    logo: '🚀', // emoji or image path (e.g., '/logo.svg')
+    tagline: 'Your catchy tagline',
+  },
+
+  // Contact
+  contact: {
+    email: 'support@your-domain.com',
+    twitter: '@yourhandle', // or empty
+    github: 'https://github.com/your-repo', // or empty
+  },
+
+  // Legal
+  legal: {
+    companyName: 'Your Company Name',
+    privacyUrl: '/legal#privacy',
+    termsUrl: '/legal#terms',
+  },
+
+  // Feature toggles
+  features: {
+    enableDemoOnHome: true,
+    showCreditsInHeader: true,
+  },
 }
 ```
 
-Or set environment variables:
+### 1.2 SEO Configuration
+
+Edit `src/config/seo.ts`:
+
+```typescript
+export const seoConfig = {
+  // Default SEO
+  default: {
+    title: 'Your Product Title',
+    description: 'Your product description for search engines',
+    keywords: ['your', 'keywords', 'here'],
+  },
+
+  // OpenGraph
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+  },
+
+  // Twitter
+  twitter: {
+    card: 'summary_large_image',
+    site: '@yourhandle', // or empty
+    creator: '@yourhandle', // or empty
+  },
+
+  // Page-specific SEO
+  pages: {
+    pricing: {
+      title: 'Pricing',
+      description: 'Your pricing page description',
+    },
+    faq: {
+      title: 'FAQ',
+      description: 'Your FAQ page description',
+    },
+    legal: {
+      title: 'Legal',
+      description: 'Your legal page description',
+    },
+  },
+}
+```
+
+### 1.3 Environment Variables (Optional Override)
+
+Set environment variables to override config values:
 
 ```env
 NEXT_PUBLIC_APP_URL=https://your-domain.com
 NEXT_PUBLIC_APP_NAME=Your Product Name
-```
-
-### 1.2 SEO Metadata
-
-Edit `src/app/layout.tsx`:
-
-```typescript
-const appName = env.app.name
-const description = 'Your product description here'
-const keywords = ['your', 'keywords', 'here']
-```
-
-### 1.3 Translations
-
-Update `src/locales/en.json` and `src/locales/zh.json`:
-
-```json
-{
-  "app": {
-    "name": "Your Product Name",
-    "tagline": "Your catchy tagline"
-  }
-}
 ```
 
 ## Step 2: Replace the Demo (45 min)
@@ -277,10 +323,21 @@ Set environment variables in Vercel dashboard:
 
 Execute all migration files in your production Supabase project.
 
+## Configuration Files Summary
+
+| File | Purpose |
+|------|---------|
+| `src/config/site.ts` | Brand, contact, legal, feature toggles |
+| `src/config/seo.ts` | SEO, OpenGraph, Twitter, page metadata |
+| `src/config/env.ts` | Environment variables (sensitive, runtime) |
+| `src/config/credits.ts` | Credits system configuration |
+| `src/config/plans.ts` | Plans and entitlements |
+
 ## Checklist
 
-- [ ] Brand name and URL configured
-- [ ] SEO metadata updated
+- [ ] Brand name and logo configured in `site.ts`
+- [ ] SEO metadata updated in `seo.ts`
+- [ ] Contact and legal info updated in `site.ts`
 - [ ] Demo replaced with your feature
 - [ ] AI provider configured
 - [ ] Mock mode disabled

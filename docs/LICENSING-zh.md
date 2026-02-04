@@ -83,4 +83,4 @@
 - 邮箱：support@profilelift.pro
 
 自定义许可安排（企业版、OEM 等）：
-- 邮箱：business@profilelift.pro
+- 邮箱：support@profilelift.pro

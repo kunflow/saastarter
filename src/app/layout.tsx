@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { siteConfig } from "@/config/site";
+import { seoConfig } from "@/config/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,31 +16,42 @@ const geistMono = Geist_Mono({
 });
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-const appName = process.env.NEXT_PUBLIC_APP_NAME || 'Next-AI SaaS'
+const brandName = siteConfig.brand.name
+const { title: defaultTitle, description } = seoConfig.default
+const keywords = [...seoConfig.default.keywords]
+
+// Build twitter metadata conditionally
+const twitterMeta: Metadata['twitter'] = {
+  card: seoConfig.twitter.card,
+  title: `${brandName} - ${defaultTitle}`,
+  description,
+}
+if (seoConfig.twitter.site) {
+  twitterMeta.site = seoConfig.twitter.site
+}
+if (seoConfig.twitter.creator) {
+  twitterMeta.creator = seoConfig.twitter.creator
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: `${appName} - AI-Powered Text to Emoji`,
-    template: `%s | ${appName}`,
+    default: `${brandName} - ${defaultTitle}`,
+    template: `%s | ${brandName}`,
   },
-  description: "Transform your text into expressive emojis instantly with AI",
-  keywords: ['AI', 'SaaS', 'Text to Emoji', 'AI Generation', 'Streaming'],
-  authors: [{ name: appName }],
-  creator: appName,
+  description,
+  keywords,
+  authors: [{ name: brandName }],
+  creator: brandName,
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
+    type: seoConfig.openGraph.type,
+    locale: seoConfig.openGraph.locale,
     url: baseUrl,
-    siteName: appName,
-    title: `${appName} - AI-Powered Text to Emoji`,
-    description: "Transform your text into expressive emojis instantly with AI",
+    siteName: brandName,
+    title: `${brandName} - ${defaultTitle}`,
+    description,
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: `${appName} - AI-Powered Text to Emoji`,
-    description: "Transform your text into expressive emojis instantly with AI",
-  },
+  twitter: twitterMeta,
   robots: {
     index: true,
     follow: true,

@@ -1,12 +1,15 @@
 import { Metadata } from 'next'
 import FAQContent from './faq-content'
+import { seoConfig } from '@/config/seo'
+
+const { title, description } = seoConfig.pages.faq
 
 export const metadata: Metadata = {
-  title: 'FAQ',
-  description: 'Frequently asked questions about our AI-powered services.',
+  title,
+  description,
   openGraph: {
-    title: 'FAQ',
-    description: 'Frequently asked questions about our AI-powered services.',
+    title,
+    description,
   },
 }
 

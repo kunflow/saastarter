@@ -83,4 +83,4 @@ For licensing questions:
 - Email: support@profilelift.pro
 
 For custom licensing arrangements (enterprise, OEM, etc.):
-- Email: business@profilelift.pro
+- Email: support@profilelift.pro

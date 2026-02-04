@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useTranslation } from '@/lib/i18n'
 import { Button } from '@/components/ui'
 import { useAuth } from '@/components/auth/auth-provider'
+import { siteConfig } from '@/config/site'
 
 export function Header() {
   const { t, locale, setLocale } = useTranslation()
@@ -18,8 +19,8 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
-            <span className="text-xl">✨</span>
-            <span className="hidden sm:inline">{t('common.appName')}</span>
+            <span className="text-xl">{siteConfig.brand.logo}</span>
+            <span className="hidden sm:inline">{siteConfig.brand.name}</span>
           </Link>
 
           <nav className="hidden items-center gap-4 text-sm md:flex">

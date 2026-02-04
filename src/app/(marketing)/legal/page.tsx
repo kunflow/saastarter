@@ -1,12 +1,15 @@
 import { Metadata } from 'next'
 import LegalContent from './legal-content'
+import { seoConfig } from '@/config/seo'
+
+const { title, description } = seoConfig.pages.legal
 
 export const metadata: Metadata = {
-  title: 'Legal',
-  description: 'Terms of Service and Privacy Policy.',
+  title,
+  description,
   openGraph: {
-    title: 'Legal',
-    description: 'Terms of Service and Privacy Policy.',
+    title,
+    description,
   },
 }
 
