@@ -9,20 +9,20 @@ export const siteConfig = {
   // Brand
   brand: {
     name: process.env.NEXT_PUBLIC_APP_NAME || 'Next-AI SaaS',
-    logo: '✨', // emoji or image path (e.g., '/logo.svg')
-    tagline: 'AI-Powered SaaS Starter',
+    logo: process.env.NEXT_PUBLIC_APP_LOGO || '✨', // emoji or image path (e.g., '/logo.svg')
+    tagline: process.env.NEXT_PUBLIC_APP_TAGLINE || 'AI-Powered SaaS Starter',
   },
 
   // Contact
   contact: {
-    email: 'support@example.com',
-    twitter: '', // @handle or empty
-    github: '', // repository URL or empty
+    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'support@example.com',
+    twitter: process.env.NEXT_PUBLIC_CONTACT_TWITTER || '', // @handle or empty
+    github: process.env.NEXT_PUBLIC_CONTACT_GITHUB || '', // repository URL or empty
   },
 
   // Legal
   legal: {
-    companyName: 'Your Company',
+    companyName: process.env.NEXT_PUBLIC_COMPANY_NAME || 'Your Company',
     privacyUrl: '/legal#privacy',
     termsUrl: '/legal#terms',
   },

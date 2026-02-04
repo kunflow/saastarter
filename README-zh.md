@@ -13,6 +13,7 @@
 - **滥用防护** - 速率限制、匿名配额、成本护栏
 - **国际化支持** - 内置中英文
 - **SEO 就绪** - 动态 sitemap、robots.txt、元数据
+- **零代码品牌定制** - 通过环境变量配置一切
 
 ## 快速开始（10 分钟）
 
@@ -36,12 +37,25 @@ pnpm install
 cp .env.example .env
 ```
 
-编辑 `.env`，填入你的 Supabase 凭据：
+编辑 `.env`，填入你的设置：
 
 ```env
+# Supabase（必填）
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# 品牌（请自定义！）
+NEXT_PUBLIC_APP_NAME=你的产品名称
+NEXT_PUBLIC_APP_LOGO=🚀
+NEXT_PUBLIC_APP_TAGLINE=你的产品标语
+NEXT_PUBLIC_COMPANY_NAME=你的公司名称
+NEXT_PUBLIC_CONTACT_EMAIL=support@your-domain.com
+
+# SEO
+NEXT_PUBLIC_SEO_TITLE=你的产品标题
+NEXT_PUBLIC_SEO_DESCRIPTION=你的产品描述
+NEXT_PUBLIC_SEO_KEYWORDS=你的,关键词,列表
 ```
 
 ### 第三步：初始化数据库
@@ -75,6 +89,41 @@ pnpm dev
 
 **恭喜！** 你的 AI SaaS 已经运行起来了。
 
+## 配置说明
+
+### 环境变量
+
+所有品牌和设置都可以通过 `.env` 配置：
+
+| 类别 | 变量 | 说明 |
+|------|------|------|
+| **应用** | `NEXT_PUBLIC_APP_URL` | 应用 URL |
+| | `NEXT_PUBLIC_APP_NAME` | 品牌名称 |
+| | `NEXT_PUBLIC_APP_LOGO` | Logo（emoji 或路径） |
+| | `NEXT_PUBLIC_APP_TAGLINE` | 品牌标语 |
+| **品牌** | `NEXT_PUBLIC_COMPANY_NAME` | 法律主体名称 |
+| | `NEXT_PUBLIC_CONTACT_EMAIL` | 联系邮箱 |
+| | `NEXT_PUBLIC_CONTACT_TWITTER` | Twitter 账号 |
+| | `NEXT_PUBLIC_CONTACT_GITHUB` | GitHub URL |
+| **SEO** | `NEXT_PUBLIC_SEO_TITLE` | 默认页面标题 |
+| | `NEXT_PUBLIC_SEO_DESCRIPTION` | Meta 描述 |
+| | `NEXT_PUBLIC_SEO_KEYWORDS` | 关键词（逗号分隔） |
+| | `NEXT_PUBLIC_TWITTER_SITE` | Twitter 网站账号 |
+
+完整列表请查看 [docs/env-variables.md](./docs/env-variables.md)。
+
+### 配置文件
+
+如需高级自定义，可编辑 `src/config/` 下的配置文件：
+
+| 文件 | 用途 |
+|------|------|
+| `site.ts` | 品牌、联系方式、法律、功能开关 |
+| `seo.ts` | SEO、OpenGraph、Twitter、页面元数据 |
+| `env.ts` | 环境变量（Supabase、AI、应用设置） |
+| `credits.ts` | 默认额度、扣减规则 |
+| `plans.ts` | Free/Pro 方案定义 |
+
 ## 项目结构
 
 ```
@@ -87,6 +136,8 @@ src/
 │   └── readme/            # 开发者指南（隐藏）
 ├── components/            # React 组件
 ├── config/                # 配置文件
+│   ├── site.ts           # 网站配置
+│   ├── seo.ts            # SEO 配置
 │   ├── env.ts            # 环境变量
 │   ├── credits.ts        # Credits 配置
 │   └── plans.ts          # Plans 配置
@@ -94,19 +145,10 @@ src/
 └── locales/               # i18n 翻译文件
 ```
 
-## 配置说明
-
-所有配置集中在 `src/config/`：
-
-| 文件 | 用途 |
-|------|------|
-| `env.ts` | 环境变量（Supabase、AI、应用设置） |
-| `credits.ts` | 默认额度、扣减规则 |
-| `plans.ts` | Free/Pro 方案定义 |
-
 ## 下一步
 
-- [改造成你的产品](./docs/MAKE-IT-YOURS.md) - 2 小时定制化指南
+- [改造成你的产品](./docs/MAKE-IT-YOURS-zh.md) - 2 小时定制化指南
+- [环境变量](./docs/env-variables.md) - 完整配置参考
 - [运营指南](./docs/OPERATING-GUIDE.md) - 生产环境最佳实践
 - [授权说明](./docs/LICENSING.md) - 许可条款
 

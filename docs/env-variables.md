@@ -6,28 +6,28 @@
 
 This document describes all environment variables used in the Next-AI SaaS Starter project.
 
-All environment variables are centrally managed through `src/config/env.ts`. This ensures:
+All environment variables are centrally managed through configuration files in `src/config/`. This ensures:
 - Single source of truth for all configuration
 - Type-safe access to environment variables
 - Default values for optional variables
 - No scattered `process.env` calls throughout the codebase
 
-## Configuration File
+## Quick Start
 
-Environment variables are accessed via the `env` object exported from `src/config/env.ts`:
+1. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
 
-```typescript
-import { env } from '@/config/env'
+2. Fill in your Supabase credentials from [Supabase Dashboard](https://supabase.com/dashboard)
 
-// Usage examples
-const appName = env.app.name
-const isSupabaseConfigured = env.supabase.isConfigured
-const aiModel = env.ai.model
-```
+3. Customize your branding (all `NEXT_PUBLIC_*` variables)
 
-## Required Variables
+4. Start developing!
 
-### Supabase Configuration
+## Environment Variables Reference
+
+### Supabase Configuration (Required)
 
 | Variable | Description | Example |
 |----------|-------------|---------|
@@ -37,14 +37,34 @@ const aiModel = env.ai.model
 
 > **Note**: If Supabase is not configured, the app will run in mock mode.
 
-### App Configuration
+### App & Branding
 
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `NEXT_PUBLIC_APP_URL` | Application base URL | `http://localhost:3000` |
-| `NEXT_PUBLIC_APP_NAME` | Application display name | `Next-AI SaaS` |
+| `NEXT_PUBLIC_APP_NAME` | Brand/product name (shown in header, footer, SEO) | `Next-AI SaaS` |
+| `NEXT_PUBLIC_APP_LOGO` | Logo emoji or image path (e.g., `/logo.svg`) | `✨` |
+| `NEXT_PUBLIC_APP_TAGLINE` | Brand tagline | `AI-Powered SaaS Starter` |
 
-## Optional Variables
+### Brand & Contact
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_COMPANY_NAME` | Legal company name (shown in footer copyright) | `Your Company` |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | Support email address | `support@example.com` |
+| `NEXT_PUBLIC_CONTACT_TWITTER` | Twitter handle (e.g., `@yourhandle`) | (empty) |
+| `NEXT_PUBLIC_CONTACT_GITHUB` | GitHub repository URL | (empty) |
+
+### SEO Configuration
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_SEO_TITLE` | Default page title (combined with brand name) | `AI-Powered Text to Emoji` |
+| `NEXT_PUBLIC_SEO_DESCRIPTION` | Meta description for search engines | `Transform your text into...` |
+| `NEXT_PUBLIC_SEO_KEYWORDS` | SEO keywords (comma-separated) | `AI,SaaS,Text to Emoji,...` |
+| `NEXT_PUBLIC_OG_LOCALE` | OpenGraph locale | `en_US` |
+| `NEXT_PUBLIC_TWITTER_SITE` | Twitter site handle for Twitter Cards | (empty) |
+| `NEXT_PUBLIC_TWITTER_CREATOR` | Twitter creator handle for Twitter Cards | (empty) |
 
 ### Mode Configuration
 
@@ -79,57 +99,43 @@ const aiModel = env.ai.model
 |----------|-------------|---------|
 | `ENABLE_README_PAGE` | Enable /readme developer guide page | `true` in development, `false` in production |
 
-## Configuration Structure
+## Configuration Files
 
-The `env` object in `src/config/env.ts` is organized as follows:
+Environment variables are organized into configuration files:
+
+| File | Purpose | Variables Used |
+|------|---------|----------------|
+| `src/config/site.ts` | Brand, contact, legal, features | `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_APP_LOGO`, `NEXT_PUBLIC_APP_TAGLINE`, `NEXT_PUBLIC_COMPANY_NAME`, `NEXT_PUBLIC_CONTACT_*` |
+| `src/config/seo.ts` | SEO, OpenGraph, Twitter | `NEXT_PUBLIC_SEO_*`, `NEXT_PUBLIC_OG_*`, `NEXT_PUBLIC_TWITTER_*` |
+| `src/config/env.ts` | Environment, Supabase, AI, Credits | All other variables |
+| `src/config/credits.ts` | Credits system rules | (uses `src/config/env.ts`) |
+| `src/config/plans.ts` | Plans and entitlements | (code-based configuration) |
+
+## Usage in Code
 
 ```typescript
-export const env = {
-  app: {
-    url: string,
-    name: string,
-    mode: 'development' | 'production' | 'test' | 'mock',
-    enableMock: boolean,
-  },
-  supabase: {
-    url: string,
-    anonKey: string,
-    serviceRoleKey: string,
-    isConfigured: boolean,      // true if url and anonKey are set
-    isServiceConfigured: boolean, // true if url and serviceRoleKey are set
-  },
-  ai: {
-    provider: string,
-    model: string,
-    timeout: number,
-    maxRetries: number,
-    mockMode: boolean,
-    rateLimitPerMinute: number,
-    openaiApiKey: string,
-  },
-  credits: {
-    defaultFree: number,
-    defaultPro: number,
-    anonymousQuota: number,
-  },
-  features: {
-    enableReadmePage: boolean,  // /readme developer guide page
-  },
-}
+// Site configuration
+import { siteConfig } from '@/config/site'
+const brandName = siteConfig.brand.name
+const logo = siteConfig.brand.logo
+
+// SEO configuration
+import { seoConfig } from '@/config/seo'
+const title = seoConfig.default.title
+const description = seoConfig.default.description
+
+// Environment configuration
+import { env } from '@/config/env'
+const isSupabaseConfigured = env.supabase.isConfigured
+const aiModel = env.ai.model
 ```
 
-## Setup Instructions
+## Priority
 
-1. Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Fill in your Supabase credentials from [Supabase Dashboard](https://supabase.com/dashboard)
-
-3. Update other variables as needed
-
-4. For development without Supabase, keep the defaults (mock mode will be used)
+Configuration values follow this priority (highest to lowest):
+1. Environment variables
+2. Config file values
+3. Default values
 
 ## Security Notes
 
@@ -137,15 +143,11 @@ export const env = {
 - `NEXT_PUBLIC_*` variables are exposed to the browser
 - `SUPABASE_SERVICE_ROLE_KEY` should only be used server-side
 - Keep API keys and secrets secure
-- The `env.ts` file provides runtime checks but does not expose sensitive values
 
-## Related Files
+## Related Documentation
 
-| File | Purpose |
-|------|---------|
-| `.env` | Local environment variables (not committed) |
+| Document | Purpose |
+|----------|---------|
 | `.env.example` | Template for environment variables |
-| `src/config/env.ts` | Centralized environment configuration |
-| `src/config/credits.ts` | Credits system configuration |
-| `src/config/plans.ts` | Plans and entitlements configuration |
-| `src/lib/ai/config.ts` | AI Gateway configuration |
+| `docs/MAKE-IT-YOURS.md` | Customization guide |
+| `supabase/README.md` | Database documentation |

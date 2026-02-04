@@ -6,95 +6,45 @@ Transform this template into your own product in about 2 hours.
 
 This guide walks you through customizing the template for your specific AI product. By the end, you'll have a fully branded, functional AI SaaS.
 
-## Step 1: Brand & SEO Configuration (10 min)
+## Step 1: Brand & SEO Configuration (5 min)
 
-### 1.1 Site Configuration
+All brand and SEO settings can be configured via environment variables in `.env`:
 
-Edit `src/config/site.ts`:
-
-```typescript
-export const siteConfig = {
-  // Brand
-  brand: {
-    name: process.env.NEXT_PUBLIC_APP_NAME || 'Your Product Name',
-    logo: '🚀', // emoji or image path (e.g., '/logo.svg')
-    tagline: 'Your catchy tagline',
-  },
-
-  // Contact
-  contact: {
-    email: 'support@your-domain.com',
-    twitter: '@yourhandle', // or empty
-    github: 'https://github.com/your-repo', // or empty
-  },
-
-  // Legal
-  legal: {
-    companyName: 'Your Company Name',
-    privacyUrl: '/legal#privacy',
-    termsUrl: '/legal#terms',
-  },
-
-  // Feature toggles
-  features: {
-    enableDemoOnHome: true,
-    showCreditsInHeader: true,
-  },
-}
-```
-
-### 1.2 SEO Configuration
-
-Edit `src/config/seo.ts`:
-
-```typescript
-export const seoConfig = {
-  // Default SEO
-  default: {
-    title: 'Your Product Title',
-    description: 'Your product description for search engines',
-    keywords: ['your', 'keywords', 'here'],
-  },
-
-  // OpenGraph
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-  },
-
-  // Twitter
-  twitter: {
-    card: 'summary_large_image',
-    site: '@yourhandle', // or empty
-    creator: '@yourhandle', // or empty
-  },
-
-  // Page-specific SEO
-  pages: {
-    pricing: {
-      title: 'Pricing',
-      description: 'Your pricing page description',
-    },
-    faq: {
-      title: 'FAQ',
-      description: 'Your FAQ page description',
-    },
-    legal: {
-      title: 'Legal',
-      description: 'Your legal page description',
-    },
-  },
-}
-```
-
-### 1.3 Environment Variables (Optional Override)
-
-Set environment variables to override config values:
+### 1.1 App & Brand Settings
 
 ```env
+# App
 NEXT_PUBLIC_APP_URL=https://your-domain.com
 NEXT_PUBLIC_APP_NAME=Your Product Name
+NEXT_PUBLIC_APP_LOGO=🚀
+NEXT_PUBLIC_APP_TAGLINE=Your catchy tagline
+
+# Brand & Contact
+NEXT_PUBLIC_COMPANY_NAME=Your Company Name
+NEXT_PUBLIC_CONTACT_EMAIL=support@your-domain.com
+NEXT_PUBLIC_CONTACT_TWITTER=@yourhandle
+NEXT_PUBLIC_CONTACT_GITHUB=https://github.com/your-repo
 ```
+
+### 1.2 SEO Settings
+
+```env
+# SEO
+NEXT_PUBLIC_SEO_TITLE=Your Product Title
+NEXT_PUBLIC_SEO_DESCRIPTION=Your product description for search engines
+NEXT_PUBLIC_SEO_KEYWORDS=your,keywords,here
+NEXT_PUBLIC_OG_LOCALE=en_US
+
+# Twitter Cards
+NEXT_PUBLIC_TWITTER_SITE=@yourhandle
+NEXT_PUBLIC_TWITTER_CREATOR=@yourhandle
+```
+
+### 1.3 Configuration Files (Optional)
+
+For advanced customization, you can also edit the config files directly:
+- `src/config/site.ts` - Brand, contact, legal, feature toggles
+- `src/config/seo.ts` - SEO, OpenGraph, Twitter, page metadata
 
 ## Step 2: Replace the Demo (45 min)
 
@@ -223,8 +173,6 @@ OPENAI_API_KEY=sk-your-api-key
 
 ### 3.2 Configure Model
 
-Edit `.env`:
-
 ```env
 AI_PROVIDER=openai
 AI_MODEL=gpt-4o-mini
@@ -323,21 +271,28 @@ Set environment variables in Vercel dashboard:
 
 Execute all migration files in your production Supabase project.
 
-## Configuration Files Summary
+## Environment Variables Summary
 
-| File | Purpose |
-|------|---------|
-| `src/config/site.ts` | Brand, contact, legal, feature toggles |
-| `src/config/seo.ts` | SEO, OpenGraph, Twitter, page metadata |
-| `src/config/env.ts` | Environment variables (sensitive, runtime) |
-| `src/config/credits.ts` | Credits system configuration |
-| `src/config/plans.ts` | Plans and entitlements |
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_APP_URL` | Application URL | `http://localhost:3000` |
+| `NEXT_PUBLIC_APP_NAME` | Brand name | `Next-AI SaaS` |
+| `NEXT_PUBLIC_APP_LOGO` | Logo (emoji or path) | `✨` |
+| `NEXT_PUBLIC_APP_TAGLINE` | Brand tagline | `AI-Powered SaaS Starter` |
+| `NEXT_PUBLIC_COMPANY_NAME` | Legal company name | `Your Company` |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | Support email | `support@example.com` |
+| `NEXT_PUBLIC_CONTACT_TWITTER` | Twitter handle | (empty) |
+| `NEXT_PUBLIC_CONTACT_GITHUB` | GitHub URL | (empty) |
+| `NEXT_PUBLIC_SEO_TITLE` | Default page title | `AI-Powered Text to Emoji` |
+| `NEXT_PUBLIC_SEO_DESCRIPTION` | Meta description | (see .env.example) |
+| `NEXT_PUBLIC_SEO_KEYWORDS` | SEO keywords (comma-separated) | `AI,SaaS,...` |
+| `NEXT_PUBLIC_OG_LOCALE` | OpenGraph locale | `en_US` |
+| `NEXT_PUBLIC_TWITTER_SITE` | Twitter site handle | (empty) |
+| `NEXT_PUBLIC_TWITTER_CREATOR` | Twitter creator handle | (empty) |
 
 ## Checklist
 
-- [ ] Brand name and logo configured in `site.ts`
-- [ ] SEO metadata updated in `seo.ts`
-- [ ] Contact and legal info updated in `site.ts`
+- [ ] Environment variables configured in `.env`
 - [ ] Demo replaced with your feature
 - [ ] AI provider configured
 - [ ] Mock mode disabled

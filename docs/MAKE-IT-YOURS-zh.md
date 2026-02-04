@@ -6,95 +6,45 @@
 
 本指南将引导你针对特定 AI 产品定制模板。完成后，你将拥有一个完全品牌化、功能齐全的 AI SaaS。
 
-## 第一步：品牌与 SEO 配置（10 分钟）
+## 第一步：品牌与 SEO 配置（5 分钟）
 
-### 1.1 网站配置
+所有品牌和 SEO 设置都可以通过 `.env` 环境变量配置：
 
-编辑 `src/config/site.ts`：
-
-```typescript
-export const siteConfig = {
-  // 品牌
-  brand: {
-    name: process.env.NEXT_PUBLIC_APP_NAME || '你的产品名称',
-    logo: '🚀', // emoji 或图片路径（如 '/logo.svg'）
-    tagline: '你的产品标语',
-  },
-
-  // 联系方式
-  contact: {
-    email: 'support@your-domain.com',
-    twitter: '@yourhandle', // 或留空
-    github: 'https://github.com/your-repo', // 或留空
-  },
-
-  // 法律
-  legal: {
-    companyName: '你的公司名称',
-    privacyUrl: '/legal#privacy',
-    termsUrl: '/legal#terms',
-  },
-
-  // 功能开关
-  features: {
-    enableDemoOnHome: true,
-    showCreditsInHeader: true,
-  },
-}
-```
-
-### 1.2 SEO 配置
-
-编辑 `src/config/seo.ts`：
-
-```typescript
-export const seoConfig = {
-  // 默认 SEO
-  default: {
-    title: '你的产品标题',
-    description: '你的产品描述，用于搜索引擎',
-    keywords: ['你的', '关键词', '列表'],
-  },
-
-  // OpenGraph
-  openGraph: {
-    type: 'website',
-    locale: 'zh_CN',
-  },
-
-  // Twitter
-  twitter: {
-    card: 'summary_large_image',
-    site: '@yourhandle', // 或留空
-    creator: '@yourhandle', // 或留空
-  },
-
-  // 页面特定 SEO
-  pages: {
-    pricing: {
-      title: '定价',
-      description: '你的定价页面描述',
-    },
-    faq: {
-      title: '常见问题',
-      description: '你的常见问题页面描述',
-    },
-    legal: {
-      title: '法律条款',
-      description: '你的法律条款页面描述',
-    },
-  },
-}
-```
-
-### 1.3 环境变量（可选覆盖）
-
-设置环境变量以覆盖配置值：
+### 1.1 应用和品牌设置
 
 ```env
+# 应用
 NEXT_PUBLIC_APP_URL=https://your-domain.com
 NEXT_PUBLIC_APP_NAME=你的产品名称
+NEXT_PUBLIC_APP_LOGO=🚀
+NEXT_PUBLIC_APP_TAGLINE=你的产品标语
+
+# 品牌与联系方式
+NEXT_PUBLIC_COMPANY_NAME=你的公司名称
+NEXT_PUBLIC_CONTACT_EMAIL=support@your-domain.com
+NEXT_PUBLIC_CONTACT_TWITTER=@yourhandle
+NEXT_PUBLIC_CONTACT_GITHUB=https://github.com/your-repo
 ```
+
+### 1.2 SEO 设置
+
+```env
+# SEO
+NEXT_PUBLIC_SEO_TITLE=你的产品标题
+NEXT_PUBLIC_SEO_DESCRIPTION=你的产品描述，用于搜索引擎
+NEXT_PUBLIC_SEO_KEYWORDS=你的,关键词,列表
+NEXT_PUBLIC_OG_LOCALE=zh_CN
+
+# Twitter 卡片
+NEXT_PUBLIC_TWITTER_SITE=@yourhandle
+NEXT_PUBLIC_TWITTER_CREATOR=@yourhandle
+```
+
+### 1.3 配置文件（可选）
+
+如需高级自定义，也可以直接编辑配置文件：
+- `src/config/site.ts` - 品牌、联系方式、法律、功能开关
+- `src/config/seo.ts` - SEO、OpenGraph、Twitter、页面元数据
 
 ## 第二步：替换演示功能（45 分钟）
 
@@ -223,8 +173,6 @@ OPENAI_API_KEY=sk-your-api-key
 
 ### 3.2 配置模型
 
-编辑 `.env`：
-
 ```env
 AI_PROVIDER=openai
 AI_MODEL=gpt-4o-mini
@@ -323,21 +271,28 @@ vercel
 
 在你的生产 Supabase 项目中执行所有迁移文件。
 
-## 配置文件汇总
+## 环境变量汇总
 
-| 文件 | 用途 |
-|------|------|
-| `src/config/site.ts` | 品牌、联系方式、法律、功能开关 |
-| `src/config/seo.ts` | SEO、OpenGraph、Twitter、页面元数据 |
-| `src/config/env.ts` | 环境变量（敏感信息、运行时配置） |
-| `src/config/credits.ts` | Credits 系统配置 |
-| `src/config/plans.ts` | 方案和权益配置 |
+| 变量 | 说明 | 默认值 |
+|------|------|--------|
+| `NEXT_PUBLIC_APP_URL` | 应用 URL | `http://localhost:3000` |
+| `NEXT_PUBLIC_APP_NAME` | 品牌名称 | `Next-AI SaaS` |
+| `NEXT_PUBLIC_APP_LOGO` | Logo（emoji 或路径） | `✨` |
+| `NEXT_PUBLIC_APP_TAGLINE` | 品牌标语 | `AI-Powered SaaS Starter` |
+| `NEXT_PUBLIC_COMPANY_NAME` | 法律主体名称 | `Your Company` |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | 联系邮箱 | `support@example.com` |
+| `NEXT_PUBLIC_CONTACT_TWITTER` | Twitter 账号 | （空） |
+| `NEXT_PUBLIC_CONTACT_GITHUB` | GitHub URL | （空） |
+| `NEXT_PUBLIC_SEO_TITLE` | 默认页面标题 | `AI-Powered Text to Emoji` |
+| `NEXT_PUBLIC_SEO_DESCRIPTION` | Meta 描述 | （见 .env.example） |
+| `NEXT_PUBLIC_SEO_KEYWORDS` | SEO 关键词（逗号分隔） | `AI,SaaS,...` |
+| `NEXT_PUBLIC_OG_LOCALE` | OpenGraph 语言 | `en_US` |
+| `NEXT_PUBLIC_TWITTER_SITE` | Twitter 网站账号 | （空） |
+| `NEXT_PUBLIC_TWITTER_CREATOR` | Twitter 创作者账号 | （空） |
 
 ## 检查清单
 
-- [ ] 品牌名称和 Logo 已在 `site.ts` 中配置
-- [ ] SEO 元数据已在 `seo.ts` 中更新
-- [ ] 联系方式和法律信息已在 `site.ts` 中更新
+- [ ] 在 `.env` 中配置环境变量
 - [ ] 演示已替换为你的功能
 - [ ] AI 提供商已配置
 - [ ] Mock 模式已禁用

@@ -13,6 +13,7 @@ A production-ready AI-first SaaS boilerplate for indie developers and small team
 - **Abuse Protection** - Rate limiting, anonymous quotas, cost guardrails
 - **i18n Support** - English and Chinese out of the box
 - **SEO Ready** - Dynamic sitemap, robots.txt, and metadata
+- **Zero-Code Branding** - Configure everything via environment variables
 
 ## Quick Start (10 Minutes)
 
@@ -36,12 +37,25 @@ pnpm install
 cp .env.example .env
 ```
 
-Edit `.env` with your Supabase credentials:
+Edit `.env` with your settings:
 
 ```env
+# Supabase (Required)
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# Branding (Customize these!)
+NEXT_PUBLIC_APP_NAME=Your Product Name
+NEXT_PUBLIC_APP_LOGO=🚀
+NEXT_PUBLIC_APP_TAGLINE=Your catchy tagline
+NEXT_PUBLIC_COMPANY_NAME=Your Company
+NEXT_PUBLIC_CONTACT_EMAIL=support@your-domain.com
+
+# SEO
+NEXT_PUBLIC_SEO_TITLE=Your Product Title
+NEXT_PUBLIC_SEO_DESCRIPTION=Your product description
+NEXT_PUBLIC_SEO_KEYWORDS=your,keywords,here
 ```
 
 ### Step 3: Setup Database
@@ -75,6 +89,41 @@ Open [http://localhost:3000](http://localhost:3000) - you should see the demo pa
 
 **Congratulations!** Your AI SaaS is running.
 
+## Configuration
+
+### Environment Variables
+
+All branding and settings can be configured via `.env`:
+
+| Category | Variable | Description |
+|----------|----------|-------------|
+| **App** | `NEXT_PUBLIC_APP_URL` | Application URL |
+| | `NEXT_PUBLIC_APP_NAME` | Brand name |
+| | `NEXT_PUBLIC_APP_LOGO` | Logo (emoji or path) |
+| | `NEXT_PUBLIC_APP_TAGLINE` | Brand tagline |
+| **Brand** | `NEXT_PUBLIC_COMPANY_NAME` | Legal company name |
+| | `NEXT_PUBLIC_CONTACT_EMAIL` | Support email |
+| | `NEXT_PUBLIC_CONTACT_TWITTER` | Twitter handle |
+| | `NEXT_PUBLIC_CONTACT_GITHUB` | GitHub URL |
+| **SEO** | `NEXT_PUBLIC_SEO_TITLE` | Default page title |
+| | `NEXT_PUBLIC_SEO_DESCRIPTION` | Meta description |
+| | `NEXT_PUBLIC_SEO_KEYWORDS` | Keywords (comma-separated) |
+| | `NEXT_PUBLIC_TWITTER_SITE` | Twitter site handle |
+
+See [docs/env-variables.md](./docs/env-variables.md) for the complete list.
+
+### Configuration Files
+
+For advanced customization, edit the config files in `src/config/`:
+
+| File | Purpose |
+|------|---------|
+| `site.ts` | Brand, contact, legal, feature toggles |
+| `seo.ts` | SEO, OpenGraph, Twitter, page metadata |
+| `env.ts` | Environment variables (Supabase, AI, App settings) |
+| `credits.ts` | Default credits, deduction rules |
+| `plans.ts` | Free/Pro plan definitions |
+
 ## Project Structure
 
 ```
@@ -87,6 +136,8 @@ src/
 │   └── readme/            # Developer guide (hidden)
 ├── components/            # React components
 ├── config/                # Configuration files
+│   ├── site.ts           # Site configuration
+│   ├── seo.ts            # SEO configuration
 │   ├── env.ts            # Environment variables
 │   ├── credits.ts        # Credits configuration
 │   └── plans.ts          # Plans configuration
@@ -94,19 +145,10 @@ src/
 └── locales/               # i18n translations
 ```
 
-## Configuration
-
-All configuration is centralized in `src/config/`:
-
-| File | Purpose |
-|------|---------|
-| `env.ts` | Environment variables (Supabase, AI, App settings) |
-| `credits.ts` | Default credits, deduction rules |
-| `plans.ts` | Free/Pro plan definitions |
-
 ## Next Steps
 
 - [Make It Yours](./docs/MAKE-IT-YOURS.md) - Customize for your product (2 hours)
+- [Environment Variables](./docs/env-variables.md) - Complete configuration reference
 - [Operating Guide](./docs/OPERATING-GUIDE.md) - Production best practices
 - [Licensing](./docs/LICENSING.md) - License terms
 

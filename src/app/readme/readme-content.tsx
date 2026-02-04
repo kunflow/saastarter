@@ -32,10 +32,9 @@ function ContentEN() {
 
         <h3>Step 1: Set Up Environment</h3>
         <ol>
-          <li>Copy the environment template file and rename it to the local config file</li>
+          <li>Copy <code>.env.example</code> to <code>.env</code></li>
           <li>Get your Supabase project URL and keys from the Supabase dashboard</li>
-          <li>Fill in the Supabase URL and anon key in the config file</li>
-          <li>Fill in the service role key (for server-side operations)</li>
+          <li>Fill in all <code>NEXT_PUBLIC_*</code> variables for your branding</li>
         </ol>
 
         <h3>Step 2: Set Up Database</h3>
@@ -47,8 +46,8 @@ function ContentEN() {
 
         <h3>Step 3: Start and Test</h3>
         <ol>
-          <li>Install dependencies using pnpm</li>
-          <li>Start the development server</li>
+          <li>Run <code>pnpm install</code> to install dependencies</li>
+          <li>Run <code>pnpm dev</code> to start the development server</li>
           <li>Open the homepage in your browser</li>
           <li>Register a new account</li>
           <li>Use the Text-to-Emoji demo on the homepage</li>
@@ -59,41 +58,57 @@ function ContentEN() {
 
       {/* Section 2: Make It Yours */}
       <section>
-        <h2>2. Make It Your Product (2-Hour Guide)</h2>
+        <h2>2. Make It Your Product (Zero-Code Branding)</h2>
 
-        <h3>Brand Configuration</h3>
-        <p>All brand settings are centralized in the environment config file:</p>
+        <h3>Environment Variables</h3>
+        <p>All branding is configured via <code>.env</code> - no code changes required:</p>
+
+        <h4>App & Brand</h4>
         <ul>
-          <li><strong>App Name</strong>: Change the NEXT_PUBLIC_APP_NAME variable</li>
-          <li><strong>App URL</strong>: Update NEXT_PUBLIC_APP_URL for production</li>
-          <li><strong>Logo</strong>: Replace the emoji in the Header component or add your own logo file</li>
+          <li><code>NEXT_PUBLIC_APP_NAME</code> - Your product name</li>
+          <li><code>NEXT_PUBLIC_APP_LOGO</code> - Logo emoji or image path</li>
+          <li><code>NEXT_PUBLIC_APP_TAGLINE</code> - Your tagline</li>
+          <li><code>NEXT_PUBLIC_COMPANY_NAME</code> - Company name for footer</li>
+          <li><code>NEXT_PUBLIC_CONTACT_EMAIL</code> - Support email</li>
+          <li><code>NEXT_PUBLIC_CONTACT_TWITTER</code> - Twitter handle</li>
+          <li><code>NEXT_PUBLIC_CONTACT_GITHUB</code> - GitHub URL</li>
+        </ul>
+
+        <h4>SEO</h4>
+        <ul>
+          <li><code>NEXT_PUBLIC_SEO_TITLE</code> - Default page title</li>
+          <li><code>NEXT_PUBLIC_SEO_DESCRIPTION</code> - Meta description</li>
+          <li><code>NEXT_PUBLIC_SEO_KEYWORDS</code> - Keywords (comma-separated)</li>
+          <li><code>NEXT_PUBLIC_OG_LOCALE</code> - OpenGraph locale</li>
+          <li><code>NEXT_PUBLIC_TWITTER_SITE</code> - Twitter Cards site</li>
+          <li><code>NEXT_PUBLIC_TWITTER_CREATOR</code> - Twitter Cards creator</li>
+        </ul>
+
+        <h3>Configuration Files (Advanced)</h3>
+        <p>For advanced customization beyond environment variables:</p>
+        <ul>
+          <li><code>src/config/site.ts</code> - Brand, contact, legal, feature toggles</li>
+          <li><code>src/config/seo.ts</code> - SEO, OpenGraph, Twitter, page metadata</li>
+          <li><code>src/config/plans.ts</code> - Plan definitions and features</li>
+          <li><code>src/config/credits.ts</code> - Credits system rules</li>
         </ul>
 
         <h3>Replace the Homepage Demo</h3>
-        <p>The demo component is located in the components/demo folder:</p>
+        <p>The demo component is located in <code>src/components/demo/</code>:</p>
         <ol>
           <li>The current demo is Text-to-Emoji, which is a good reference for structure</li>
           <li>Create your own demo component following the same pattern</li>
-          <li>Your demo should call the AI generation API endpoint</li>
+          <li>Your demo should call the <code>/api/ai/generate</code> endpoint</li>
           <li>Handle streaming responses and display progress</li>
           <li>Show credits status before and after generation</li>
           <li>Replace the demo component import on the homepage</li>
-        </ol>
-
-        <h3>Add a New Business Route</h3>
-        <ol>
-          <li>Create a new folder under src/app with your route name</li>
-          <li>Add a page file inside the folder</li>
-          <li>If the page needs authentication, check for user status and redirect if needed</li>
-          <li>If the page needs credits, use the AI generate API which handles deduction</li>
-          <li>Add translations for your new page in both locale files</li>
         </ol>
 
         <h3>Adjust Plans and Entitlements</h3>
         <p>Plan definitions are in two places:</p>
         <ul>
           <li><strong>Database</strong>: The plans and plan_entitlements tables contain the source of truth</li>
-          <li><strong>Config file</strong>: The plans config file provides client-side type definitions</li>
+          <li><strong>Config file</strong>: <code>src/config/plans.ts</code> provides client-side type definitions</li>
         </ul>
         <p>To add a new plan or modify entitlements, update both the database seed data and the config file.</p>
       </section>
@@ -104,7 +119,7 @@ function ContentEN() {
 
         <h3>Default Rate Limiting Strategy</h3>
         <ul>
-          <li><strong>Anonymous users</strong>: 3 requests per day (configurable via ANONYMOUS_QUOTA)</li>
+          <li><strong>Anonymous users</strong>: 3 requests per day (configurable via <code>ANONYMOUS_QUOTA</code>)</li>
           <li><strong>Free users</strong>: 5 requests per minute, 50 per hour</li>
           <li><strong>Pro users</strong>: 20 requests per minute, 500 per hour</li>
         </ul>
@@ -123,7 +138,7 @@ function ContentEN() {
           but carries abuse risk. The default 3-per-day limit is conservative. If you see abuse:
         </p>
         <ul>
-          <li>Reduce ANONYMOUS_QUOTA to 1 or 0</li>
+          <li>Reduce <code>ANONYMOUS_QUOTA</code> to 1 or 0</li>
           <li>Consider requiring registration for all AI features</li>
           <li>Monitor the anonymous_quotas table for suspicious patterns</li>
         </ul>
@@ -131,7 +146,7 @@ function ContentEN() {
         <h3>Adjusting Default Credits</h3>
         <p>To change the default credits for new users:</p>
         <ul>
-          <li>Update DEFAULT_FREE_CREDITS in your environment config</li>
+          <li>Update <code>DEFAULT_FREE_CREDITS</code> in your environment config</li>
           <li>Also update the system_config table in the database (key: default_credits)</li>
           <li>Existing users are not affected; only new signups get the new amount</li>
         </ul>
@@ -177,6 +192,18 @@ function ContentEN() {
           <li><strong>Function not found</strong>: The functions migration file might not have run; check for get_user_status</li>
         </ul>
       </section>
+
+      {/* Section 5: Documentation */}
+      <section>
+        <h2>5. Documentation</h2>
+        <ul>
+          <li><strong>README.md</strong> - Quick start guide</li>
+          <li><strong>docs/MAKE-IT-YOURS.md</strong> - Complete customization guide</li>
+          <li><strong>docs/env-variables.md</strong> - All environment variables reference</li>
+          <li><strong>docs/OPERATING-GUIDE.md</strong> - Production best practices</li>
+          <li><strong>supabase/README.md</strong> - Database schema documentation</li>
+        </ul>
+      </section>
     </article>
   )
 }
@@ -195,10 +222,9 @@ function ContentZH() {
 
         <h3>步骤一：配置环境</h3>
         <ol>
-          <li>复制环境变量模板文件，重命名为本地配置文件</li>
+          <li>复制 <code>.env.example</code> 为 <code>.env</code></li>
           <li>从 Supabase 控制台获取项目 URL 和密钥</li>
-          <li>在配置文件中填入 Supabase URL 和 anon key</li>
-          <li>填入 service role key（用于服务端操作）</li>
+          <li>填写所有 <code>NEXT_PUBLIC_*</code> 变量配置你的品牌信息</li>
         </ol>
 
         <h3>步骤二：初始化数据库</h3>
@@ -210,8 +236,8 @@ function ContentZH() {
 
         <h3>步骤三：启动并测试</h3>
         <ol>
-          <li>使用 pnpm 安装依赖</li>
-          <li>启动开发服务器</li>
+          <li>运行 <code>pnpm install</code> 安装依赖</li>
+          <li>运行 <code>pnpm dev</code> 启动开发服务器</li>
           <li>在浏览器中打开首页</li>
           <li>注册新账号</li>
           <li>在首页使用文字转表情演示</li>
@@ -222,41 +248,57 @@ function ContentZH() {
 
       {/* Section 2: Make It Yours */}
       <section>
-        <h2>2. 改成你的产品（2 小时指南）</h2>
+        <h2>2. 改成你的产品（零代码品牌配置）</h2>
 
-        <h3>品牌配置</h3>
-        <p>所有品牌设置都集中在环境配置文件中：</p>
+        <h3>环境变量配置</h3>
+        <p>所有品牌设置都通过 <code>.env</code> 配置，无需修改代码：</p>
+
+        <h4>应用与品牌</h4>
         <ul>
-          <li><strong>应用名称</strong>：修改 NEXT_PUBLIC_APP_NAME 变量</li>
-          <li><strong>应用地址</strong>：生产环境更新 NEXT_PUBLIC_APP_URL</li>
-          <li><strong>Logo</strong>：替换 Header 组件中的表情符号，或添加自己的 Logo 文件</li>
+          <li><code>NEXT_PUBLIC_APP_NAME</code> - 产品名称</li>
+          <li><code>NEXT_PUBLIC_APP_LOGO</code> - Logo 表情或图片路径</li>
+          <li><code>NEXT_PUBLIC_APP_TAGLINE</code> - 品牌标语</li>
+          <li><code>NEXT_PUBLIC_COMPANY_NAME</code> - 页脚显示的公司名称</li>
+          <li><code>NEXT_PUBLIC_CONTACT_EMAIL</code> - 联系邮箱</li>
+          <li><code>NEXT_PUBLIC_CONTACT_TWITTER</code> - Twitter 账号</li>
+          <li><code>NEXT_PUBLIC_CONTACT_GITHUB</code> - GitHub 地址</li>
+        </ul>
+
+        <h4>SEO 配置</h4>
+        <ul>
+          <li><code>NEXT_PUBLIC_SEO_TITLE</code> - 默认页面标题</li>
+          <li><code>NEXT_PUBLIC_SEO_DESCRIPTION</code> - Meta 描述</li>
+          <li><code>NEXT_PUBLIC_SEO_KEYWORDS</code> - 关键词（逗号分隔）</li>
+          <li><code>NEXT_PUBLIC_OG_LOCALE</code> - OpenGraph 语言</li>
+          <li><code>NEXT_PUBLIC_TWITTER_SITE</code> - Twitter 卡片网站账号</li>
+          <li><code>NEXT_PUBLIC_TWITTER_CREATOR</code> - Twitter 卡片创作者账号</li>
+        </ul>
+
+        <h3>配置文件（高级）</h3>
+        <p>如需超出环境变量范围的高级自定义：</p>
+        <ul>
+          <li><code>src/config/site.ts</code> - 品牌、联系方式、法律、功能开关</li>
+          <li><code>src/config/seo.ts</code> - SEO、OpenGraph、Twitter、页面元数据</li>
+          <li><code>src/config/plans.ts</code> - 方案定义和功能</li>
+          <li><code>src/config/credits.ts</code> - Credits 系统规则</li>
         </ul>
 
         <h3>替换首页演示</h3>
-        <p>演示组件位于 components/demo 目录：</p>
+        <p>演示组件位于 <code>src/components/demo/</code>：</p>
         <ol>
           <li>当前演示是文字转表情，可作为结构参考</li>
           <li>按照相同模式创建你自己的演示组件</li>
-          <li>演示应调用 AI 生成接口</li>
+          <li>演示应调用 <code>/api/ai/generate</code> 接口</li>
           <li>处理流式响应并显示进度</li>
           <li>在生成前后显示额度状态</li>
           <li>在首页替换演示组件的引入</li>
-        </ol>
-
-        <h3>添加新业务路由</h3>
-        <ol>
-          <li>在 src/app 下创建新的路由文件夹</li>
-          <li>在文件夹内添加页面文件</li>
-          <li>如需登录验证，检查用户状态并在未登录时重定向</li>
-          <li>如需消耗额度，使用 AI 生成接口（会自动扣减）</li>
-          <li>在两个语言文件中添加新页面的翻译</li>
         </ol>
 
         <h3>调整方案和权益</h3>
         <p>方案定义在两个地方：</p>
         <ul>
           <li><strong>数据库</strong>：plans 和 plan_entitlements 表是真实数据源</li>
-          <li><strong>配置文件</strong>：plans 配置文件提供客户端类型定义</li>
+          <li><strong>配置文件</strong>：<code>src/config/plans.ts</code> 提供客户端类型定义</li>
         </ul>
         <p>添加新方案或修改权益时，需同时更新数据库种子数据和配置文件。</p>
       </section>
@@ -267,7 +309,7 @@ function ContentZH() {
 
         <h3>默认限流策略</h3>
         <ul>
-          <li><strong>匿名用户</strong>：每天 3 次请求（通过 ANONYMOUS_QUOTA 配置）</li>
+          <li><strong>匿名用户</strong>：每天 3 次请求（通过 <code>ANONYMOUS_QUOTA</code> 配置）</li>
           <li><strong>免费用户</strong>：每分钟 5 次，每小时 50 次</li>
           <li><strong>Pro 用户</strong>：每分钟 20 次，每小时 500 次</li>
         </ul>
@@ -286,7 +328,7 @@ function ContentZH() {
           默认每天 3 次的限制比较保守。如果发现滥用：
         </p>
         <ul>
-          <li>将 ANONYMOUS_QUOTA 减少到 1 或 0</li>
+          <li>将 <code>ANONYMOUS_QUOTA</code> 减少到 1 或 0</li>
           <li>考虑要求所有 AI 功能必须注册</li>
           <li>监控 anonymous_quotas 表中的可疑模式</li>
         </ul>
@@ -294,7 +336,7 @@ function ContentZH() {
         <h3>调整默认额度</h3>
         <p>修改新用户默认额度：</p>
         <ul>
-          <li>更新环境配置中的 DEFAULT_FREE_CREDITS</li>
+          <li>更新环境配置中的 <code>DEFAULT_FREE_CREDITS</code></li>
           <li>同时更新数据库 system_config 表（key: default_credits）</li>
           <li>现有用户不受影响，只有新注册用户获得新额度</li>
         </ul>
@@ -338,6 +380,18 @@ function ContentZH() {
           <li><strong>找不到表</strong>：按顺序执行所有迁移文件</li>
           <li><strong>权限被拒绝</strong>：检查 RLS 策略；管理操作可能需要 service role key</li>
           <li><strong>找不到函数</strong>：函数迁移文件可能未执行；检查 get_user_status 是否存在</li>
+        </ul>
+      </section>
+
+      {/* Section 5: Documentation */}
+      <section>
+        <h2>5. 文档索引</h2>
+        <ul>
+          <li><strong>README-zh.md</strong> - 快速上手指南</li>
+          <li><strong>docs/MAKE-IT-YOURS-zh.md</strong> - 完整定制化指南</li>
+          <li><strong>docs/env-variables.md</strong> - 环境变量完整参考</li>
+          <li><strong>docs/OPERATING-GUIDE.md</strong> - 生产环境最佳实践</li>
+          <li><strong>supabase/README.md</strong> - 数据库结构文档</li>
         </ul>
       </section>
     </article>
