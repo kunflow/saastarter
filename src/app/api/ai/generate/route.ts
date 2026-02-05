@@ -10,6 +10,49 @@ interface GenerateRequest {
   idempotencyKey?: string
 }
 
+// Mock quota storage for development without Supabase
+// Key: IP address, Value: { count: number, date: string (YYYY-MM-DD) }
+const mockQuotaStore = new Map<string, { count: number; date: string }>()
+
+function getMockQuota(ip: string): { allowed: boolean; usage_count: number; daily_limit: number; remaining: number } {
+  const today = new Date().toISOString().split('T')[0]
+  const dailyLimit = creditsConfig.anonymousQuota.dailyLimit
+
+  const existing = mockQuotaStore.get(ip)
+
+  // Reset if new day
+  if (!existing || existing.date !== today) {
+    mockQuotaStore.set(ip, { count: 1, date: today })
+    return {
+      allowed: true,
+      usage_count: 1,
+      daily_limit: dailyLimit,
+      remaining: dailyLimit - 1
+    }
+  }
+
+  // Check if quota exceeded
+  if (existing.count >= dailyLimit) {
+    return {
+      allowed: false,
+      usage_count: existing.count,
+      daily_limit: dailyLimit,
+      remaining: 0
+    }
+  }
+
+  // Increment usage
+  existing.count += 1
+  mockQuotaStore.set(ip, existing)
+
+  return {
+    allowed: true,
+    usage_count: existing.count,
+    daily_limit: dailyLimit,
+    remaining: dailyLimit - existing.count
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body: GenerateRequest = await request.json()
@@ -39,20 +82,33 @@ export async function POST(request: NextRequest) {
 
     // Handle anonymous users with IP-based quota
     if (!user) {
+      const ip = request.headers.get('x-forwarded-for')?.split(',')[0] ||
+                 request.headers.get('x-real-ip') ||
+                 '127.0.0.1'
+
       const serviceClient = await createServiceClient()
 
-      // If no service client, allow generation in mock mode only
+      // If no service client, use mock quota
       if (!serviceClient) {
+        const mockQuota = getMockQuota(ip)
+        console.log('[AI Generate] Mock mode - IP:', ip, 'Quota:', mockQuota)
+
+        if (!mockQuota.allowed) {
+          return NextResponse.json(
+            {
+              error: 'Daily quota exceeded',
+              quota: mockQuota
+            },
+            { status: 429 }
+          )
+        }
+
         const emoji = await generateEmoji(text)
         return createStreamingResponse(emoji, {
           anonymous: true,
-          quota: { usage_count: 1, daily_limit: 3, remaining: 2 }
+          quota: mockQuota
         })
       }
-
-      const ip = request.headers.get('x-forwarded-for')?.split(',')[0] ||
-                 request.headers.get('x-real-ip') ||
-                 'unknown'
 
       const { data: quotaResult } = await serviceClient.rpc('check_anonymous_quota', {
         p_identifier: ip,
@@ -83,6 +139,7 @@ export async function POST(request: NextRequest) {
 
     if (!serviceClient) {
       // Fallback to mock mode
+      console.log('[AI Generate] No service client - running in mock mode, credits not deducted')
       const emoji = await generateEmoji(text)
       return createStreamingResponse(emoji, {
         anonymous: false,
@@ -94,13 +151,15 @@ export async function POST(request: NextRequest) {
     const key = idempotencyKey || `gen_${user.id}_${Date.now()}_${Math.random().toString(36).slice(2)}`
 
     // Deduct credits
-    const { data: deductResult } = await serviceClient.rpc('deduct_credits', {
+    console.log('[AI Generate] Deducting credits for user:', user.id)
+    const { data: deductResult, error: deductError } = await serviceClient.rpc('deduct_credits', {
       p_user_id: user.id,
       p_amount: creditsConfig.creditPerGeneration,
       p_idempotency_key: key,
       p_description: `Text to emoji: ${text.slice(0, 50)}`,
       p_metadata: { text, type: 'text_to_emoji' }
     })
+    console.log('[AI Generate] Deduct result:', deductResult, 'Error:', deductError)
 
     if (!deductResult?.success) {
       return NextResponse.json(

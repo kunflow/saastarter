@@ -40,7 +40,7 @@ cp .env.example .env
 编辑 `.env`，填入你的设置：
 
 ```env
-# Supabase（必填）
+# Supabase（可选 - 保持占位符值即可在 Mock 模式下运行）
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key

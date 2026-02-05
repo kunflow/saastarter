@@ -40,7 +40,7 @@ cp .env.example .env
 Edit `.env` with your settings:
 
 ```env
-# Supabase (Required)
+# Supabase (Optional - leave as-is for mock mode)
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key

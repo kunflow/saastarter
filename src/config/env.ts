@@ -24,10 +24,24 @@ function getEnvVarInt(key: string, defaultValue: number): number {
   return isNaN(parsed) ? defaultValue : parsed
 }
 
+// Check if URL is a valid HTTP/HTTPS URL
+function isValidUrl(url: string): boolean {
+  if (!url) return false
+  try {
+    const parsed = new URL(url)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
 // Supabase config
 const supabaseUrl = getEnvVar('NEXT_PUBLIC_SUPABASE_URL', '')
 const supabaseAnonKey = getEnvVar('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY', '')
 const supabaseServiceKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY', '')
+
+// Validate Supabase URL is a real URL (not placeholder)
+const isSupabaseUrlValid = isValidUrl(supabaseUrl)
 
 export const env = {
   // App
@@ -38,13 +52,14 @@ export const env = {
     enableMock: getEnvVarBool('ENABLE_MOCK', false),
   },
 
-  // Supabase
+  // Supabase (optional - app works without it in mock mode)
   supabase: {
     url: supabaseUrl,
     anonKey: supabaseAnonKey,
     serviceRoleKey: supabaseServiceKey,
-    isConfigured: !!(supabaseUrl && supabaseAnonKey),
-    isServiceConfigured: !!(supabaseUrl && supabaseServiceKey),
+    // Only consider configured if URL is valid (not placeholder)
+    isConfigured: isSupabaseUrlValid && !!supabaseAnonKey,
+    isServiceConfigured: isSupabaseUrlValid && !!supabaseServiceKey,
   },
 
   // AI

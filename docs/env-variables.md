@@ -27,7 +27,7 @@ All environment variables are centrally managed through configuration files in `
 
 ## Environment Variables Reference
 
-### Supabase Configuration (Required)
+### Supabase Configuration (Optional)
 
 | Variable | Description | Example |
 |----------|-------------|---------|
@@ -35,7 +35,7 @@ All environment variables are centrally managed through configuration files in `
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` | Supabase anon/public key | `eyJhbGciOiJIUzI1NiIs...` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-side only) | `eyJhbGciOiJIUzI1NiIs...` |
 
-> **Note**: If Supabase is not configured, the app will run in mock mode.
+> **Note**: Supabase is optional. If not configured (or using placeholder values), the app will run in **mock mode** - perfect for development, demos, or if you want to use a different database.
 
 ### App & Branding
 

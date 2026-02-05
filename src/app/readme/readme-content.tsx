@@ -1,399 +1,667 @@
 'use client'
 
+import { useState } from 'react'
+import Link from 'next/link'
 import { useTranslation } from '@/lib/i18n'
+
+interface SectionProps {
+  id: string
+  title: string
+  icon: string
+  children: React.ReactNode
+  defaultOpen?: boolean
+}
+
+function Section({ id, title, icon, children, defaultOpen = false }: SectionProps) {
+  const [isOpen, setIsOpen] = useState(defaultOpen)
+
+  return (
+    <div id={id} className="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex w-full items-center justify-between px-6 py-4 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">{icon}</span>
+          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{title}</h2>
+        </div>
+        <svg
+          className={`h-5 w-5 text-zinc-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {isOpen && (
+        <div className="border-t border-zinc-200 px-6 py-5 dark:border-zinc-800">
+          {children}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// 步骤卡片组件
+interface StepCardProps {
+  step: number
+  title: string
+  children: React.ReactNode
+}
+
+function StepCard({ step, title, children }: StepCardProps) {
+  return (
+    <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+      <div className="mb-3 flex items-center gap-3">
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-900 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900">
+          {step}
+        </span>
+        <h4 className="font-medium text-zinc-900 dark:text-zinc-100">{title}</h4>
+      </div>
+      <div className="ml-10 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+// 代码标签组件
+function Code({ children }: { children: React.ReactNode }) {
+  return (
+    <code className="rounded bg-zinc-200 px-1.5 py-0.5 text-xs font-mono text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200">
+      {children}
+    </code>
+  )
+}
+
+// 列表项组件
+function ListItem({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-start gap-2">
+      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+      <span>{children}</span>
+    </div>
+  )
+}
+
+interface NavItem {
+  id: string
+  title: string
+  icon: string
+}
+
+function TableOfContents({ items, locale }: { items: NavItem[]; locale: string }) {
+  const scrollTo = (id: string) => {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <h3 className="mb-3 text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+        {locale === 'zh' ? '目录导航' : 'Navigation'}
+      </h3>
+      <nav className="space-y-1">
+        {items.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => scrollTo(item.id)}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          >
+            <span>{item.icon}</span>
+            <span>{item.title}</span>
+          </button>
+        ))}
+      </nav>
+    </div>
+  )
+}
 
 export function ReadmeContent() {
   const { locale } = useTranslation()
 
+  const navItemsEN: NavItem[] = [
+    { id: 'quick-start', title: 'Quick Start', icon: '🚀' },
+    { id: 'branding', title: 'Make It Yours', icon: '🎨' },
+    { id: 'guardrails', title: 'Guardrails', icon: '🛡️' },
+    { id: 'troubleshooting', title: 'Troubleshooting', icon: '🔧' },
+    { id: 'docs', title: 'Documentation', icon: '📚' },
+  ]
+
+  const navItemsZH: NavItem[] = [
+    { id: 'quick-start', title: '快速上手', icon: '🚀' },
+    { id: 'branding', title: '品牌定制', icon: '🎨' },
+    { id: 'guardrails', title: '运营护栏', icon: '🛡️' },
+    { id: 'troubleshooting', title: '问题排障', icon: '🔧' },
+    { id: 'docs', title: '文档索引', icon: '📚' },
+  ]
+
+  const navItems = locale === 'zh' ? navItemsZH : navItemsEN
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <div className="mb-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
-        {locale === 'zh'
-          ? '这是开发者指南页面，默认不会出现在导航中，也不会被搜索引擎收录。'
-          : 'This is the developer guide page. It is not shown in navigation and is not indexed by search engines.'}
+    <div className="mx-auto max-w-5xl px-4 py-8">
+      {/* Header */}
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+          {locale === 'zh' ? '开发者指南' : 'Developer Guide'}
+        </h1>
+        <p className="mt-2 text-zinc-500 dark:text-zinc-400">
+          {locale === 'zh'
+            ? '快速上手并定制你的 AI SaaS 产品'
+            : 'Get started and customize your AI SaaS product'}
+        </p>
       </div>
 
-      {locale === 'zh' ? <ContentZH /> : <ContentEN />}
+      {/* Warning Banner */}
+      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
+        <div className="flex items-center gap-2">
+          <span>⚠️</span>
+          <span>
+            {locale === 'zh'
+              ? '这是开发者指南页面，默认不会出现在导航中，也不会被搜索引擎收录。'
+              : 'This is the developer guide page. It is not shown in navigation and is not indexed by search engines.'}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[250px_1fr]">
+        {/* Sidebar Navigation */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-8">
+            <TableOfContents items={navItems} locale={locale} />
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="space-y-4">
+          {locale === 'zh' ? <ContentZH /> : <ContentEN />}
+        </main>
+      </div>
     </div>
   )
 }
 
 function ContentEN() {
   return (
-    <article className="prose prose-zinc dark:prose-invert max-w-none">
-      <h1>Getting Started Guide</h1>
-
-      {/* Section 1: Quick Start */}
-      <section>
-        <h2>1. Three-Minute Quick Start</h2>
-        <p>
-          Follow these steps to experience the complete flow: login, generate content, see credits deducted, and trigger the insufficient credits prompt.
+    <>
+      <Section id="quick-start" title="Quick Start" icon="🚀" defaultOpen={true}>
+        <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+          Experience the complete flow: login → generate → credits deducted → insufficient credits prompt.
         </p>
 
-        <h3>Step 1: Set Up Environment</h3>
-        <ol>
-          <li>Copy <code>.env.example</code> to <code>.env</code></li>
-          <li>Get your Supabase project URL and keys from the Supabase dashboard</li>
-          <li>Fill in all <code>NEXT_PUBLIC_*</code> variables for your branding</li>
-        </ol>
+        <div className="space-y-4">
+          <StepCard step={1} title="Set Up Environment">
+            <ListItem>Copy <Code>.env.example</Code> to <Code>.env</Code></ListItem>
+            <ListItem>Get Supabase project URL and keys from dashboard</ListItem>
+            <ListItem>Fill in <Code>NEXT_PUBLIC_*</Code> variables for branding</ListItem>
+          </StepCard>
 
-        <h3>Step 2: Set Up Database</h3>
-        <ol>
-          <li>Go to your Supabase project SQL editor</li>
-          <li>Run the migration files in order (there are 8 files in the migrations folder)</li>
-          <li>Verify the tables are created: system_config, plans, user_profiles, credits, etc.</li>
-        </ol>
+          <StepCard step={2} title="Set Up Database">
+            <ListItem>Go to Supabase SQL editor</ListItem>
+            <ListItem>Run 8 migration files in order</ListItem>
+            <ListItem>Verify tables: system_config, plans, user_profiles, credits</ListItem>
+          </StepCard>
 
-        <h3>Step 3: Start and Test</h3>
-        <ol>
-          <li>Run <code>pnpm install</code> to install dependencies</li>
-          <li>Run <code>pnpm dev</code> to start the development server</li>
-          <li>Open the homepage in your browser</li>
-          <li>Register a new account</li>
-          <li>Use the Text-to-Emoji demo on the homepage</li>
-          <li>Check the dashboard to see your credits balance change</li>
-          <li>Keep generating until credits run out to see the block message</li>
-        </ol>
-      </section>
+          <StepCard step={3} title="Start and Test">
+            <ListItem>Run <Code>pnpm install</Code> then <Code>pnpm dev</Code></ListItem>
+            <ListItem>Register a new account on homepage</ListItem>
+            <ListItem>Use Text-to-Emoji demo, watch credits change</ListItem>
+            <ListItem>Generate until credits run out to see block message</ListItem>
+          </StepCard>
+        </div>
+      </Section>
 
-      {/* Section 2: Make It Yours */}
-      <section>
-        <h2>2. Make It Your Product (Zero-Code Branding)</h2>
-
-        <h3>Environment Variables</h3>
-        <p>All branding is configured via <code>.env</code> - no code changes required:</p>
-
-        <h4>App & Brand</h4>
-        <ul>
-          <li><code>NEXT_PUBLIC_APP_NAME</code> - Your product name</li>
-          <li><code>NEXT_PUBLIC_APP_LOGO</code> - Logo emoji or image path</li>
-          <li><code>NEXT_PUBLIC_APP_TAGLINE</code> - Your tagline</li>
-          <li><code>NEXT_PUBLIC_COMPANY_NAME</code> - Company name for footer</li>
-          <li><code>NEXT_PUBLIC_CONTACT_EMAIL</code> - Support email</li>
-          <li><code>NEXT_PUBLIC_CONTACT_TWITTER</code> - Twitter handle</li>
-          <li><code>NEXT_PUBLIC_CONTACT_GITHUB</code> - GitHub URL</li>
-        </ul>
-
-        <h4>SEO</h4>
-        <ul>
-          <li><code>NEXT_PUBLIC_SEO_TITLE</code> - Default page title</li>
-          <li><code>NEXT_PUBLIC_SEO_DESCRIPTION</code> - Meta description</li>
-          <li><code>NEXT_PUBLIC_SEO_KEYWORDS</code> - Keywords (comma-separated)</li>
-          <li><code>NEXT_PUBLIC_OG_LOCALE</code> - OpenGraph locale</li>
-          <li><code>NEXT_PUBLIC_TWITTER_SITE</code> - Twitter Cards site</li>
-          <li><code>NEXT_PUBLIC_TWITTER_CREATOR</code> - Twitter Cards creator</li>
-        </ul>
-
-        <h3>Configuration Files (Advanced)</h3>
-        <p>For advanced customization beyond environment variables:</p>
-        <ul>
-          <li><code>src/config/site.ts</code> - Brand, contact, legal, feature toggles</li>
-          <li><code>src/config/seo.ts</code> - SEO, OpenGraph, Twitter, page metadata</li>
-          <li><code>src/config/plans.ts</code> - Plan definitions and features</li>
-          <li><code>src/config/credits.ts</code> - Credits system rules</li>
-        </ul>
-
-        <h3>Replace the Homepage Demo</h3>
-        <p>The demo component is located in <code>src/components/demo/</code>:</p>
-        <ol>
-          <li>The current demo is Text-to-Emoji, which is a good reference for structure</li>
-          <li>Create your own demo component following the same pattern</li>
-          <li>Your demo should call the <code>/api/ai/generate</code> endpoint</li>
-          <li>Handle streaming responses and display progress</li>
-          <li>Show credits status before and after generation</li>
-          <li>Replace the demo component import on the homepage</li>
-        </ol>
-
-        <h3>Adjust Plans and Entitlements</h3>
-        <p>Plan definitions are in two places:</p>
-        <ul>
-          <li><strong>Database</strong>: The plans and plan_entitlements tables contain the source of truth</li>
-          <li><strong>Config file</strong>: <code>src/config/plans.ts</code> provides client-side type definitions</li>
-        </ul>
-        <p>To add a new plan or modify entitlements, update both the database seed data and the config file.</p>
-      </section>
-
-      {/* Section 3: Operational Guardrails */}
-      <section>
-        <h2>3. Operational Guardrails</h2>
-
-        <h3>Default Rate Limiting Strategy</h3>
-        <ul>
-          <li><strong>Anonymous users</strong>: 3 requests per day (configurable via <code>ANONYMOUS_QUOTA</code>)</li>
-          <li><strong>Free users</strong>: 5 requests per minute, 50 per hour</li>
-          <li><strong>Pro users</strong>: 20 requests per minute, 500 per hour</li>
-        </ul>
-
-        <h3>Default Credits Policy</h3>
-        <ul>
-          <li>New free users receive 100 credits on signup</li>
-          <li>Pro users receive 1000 credits monthly</li>
-          <li>Each AI generation consumes 1 credit</li>
-          <li>When balance reaches zero, generation is blocked</li>
-        </ul>
-
-        <h3>Anonymous Abuse Risk</h3>
-        <p>
-          Anonymous users can test the demo without registering. This is intentional for conversion,
-          but carries abuse risk. The default 3-per-day limit is conservative. If you see abuse:
+      <Section id="branding" title="Make It Your Product" icon="🎨">
+        <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+          All branding via <Code>.env</Code> - no code changes required.
         </p>
-        <ul>
-          <li>Reduce <code>ANONYMOUS_QUOTA</code> to 1 or 0</li>
-          <li>Consider requiring registration for all AI features</li>
-          <li>Monitor the anonymous_quotas table for suspicious patterns</li>
-        </ul>
 
-        <h3>Adjusting Default Credits</h3>
-        <p>To change the default credits for new users:</p>
-        <ul>
-          <li>Update <code>DEFAULT_FREE_CREDITS</code> in your environment config</li>
-          <li>Also update the system_config table in the database (key: default_credits)</li>
-          <li>Existing users are not affected; only new signups get the new amount</li>
-        </ul>
-      </section>
+        <div className="space-y-4">
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">App & Brand</h4>
+            <div className="grid gap-2 text-sm sm:grid-cols-2">
+              <div className="flex items-center gap-2">
+                <Code>APP_NAME</Code>
+                <span className="text-zinc-500">Product name</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>APP_LOGO</Code>
+                <span className="text-zinc-500">Logo emoji/path</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>APP_TAGLINE</Code>
+                <span className="text-zinc-500">Tagline</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>COMPANY_NAME</Code>
+                <span className="text-zinc-500">Footer company</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>CONTACT_EMAIL</Code>
+                <span className="text-zinc-500">Support email</span>
+              </div>
+            </div>
+          </div>
 
-      {/* Section 4: Troubleshooting */}
-      <section>
-        <h2>4. Troubleshooting Common Issues</h2>
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">SEO</h4>
+            <div className="grid gap-2 text-sm sm:grid-cols-2">
+              <div className="flex items-center gap-2">
+                <Code>SEO_TITLE</Code>
+                <span className="text-zinc-500">Page title</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>SEO_DESCRIPTION</Code>
+                <span className="text-zinc-500">Meta description</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>SEO_KEYWORDS</Code>
+                <span className="text-zinc-500">Keywords</span>
+              </div>
+            </div>
+          </div>
 
-        <h3>Login/Session Problems</h3>
-        <ul>
-          <li><strong>Cannot log in</strong>: Check if Supabase URL and anon key are correctly set</li>
-          <li><strong>Session not persisting</strong>: Verify cookies are enabled; check browser console for errors</li>
-          <li><strong>Stuck on loading</strong>: The AuthProvider might be waiting for Supabase; check network tab</li>
-        </ul>
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">Config Files (Advanced)</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <Code>src/config/site.ts</Code>
+                <span className="text-zinc-500">Brand, contact, legal</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>src/config/seo.ts</Code>
+                <span className="text-zinc-500">SEO, OpenGraph</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>src/config/plans.ts</Code>
+                <span className="text-zinc-500">Plan definitions</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>src/config/credits.ts</Code>
+                <span className="text-zinc-500">Credits rules</span>
+              </div>
+            </div>
+          </div>
 
-        <h3>Credits Not Refreshing</h3>
-        <ul>
-          <li><strong>Balance unchanged after generation</strong>: The user status API should be called; check dashboard network requests</li>
-          <li><strong>Shows wrong balance</strong>: Clear browser cache; the credits table might have stale data</li>
-          <li><strong>New user has no credits</strong>: Check if the signup trigger fired; look at the credit_ledger table</li>
-        </ul>
+          <StepCard step={1} title="Replace Homepage Demo">
+            <ListItem>Demo in <Code>src/components/demo/</Code></ListItem>
+            <ListItem>Call <Code>/api/ai/generate</Code> endpoint</ListItem>
+            <ListItem>Handle streaming responses</ListItem>
+            <ListItem>Show credits before and after</ListItem>
+          </StepCard>
+        </div>
+      </Section>
 
-        <h3>Generation Failures</h3>
-        <ul>
-          <li><strong>Error: Insufficient credits</strong>: Check the credits table for the user; balance might be zero</li>
-          <li><strong>Error: Database not configured</strong>: Supabase environment variables are missing or invalid</li>
-          <li><strong>Error: Daily quota exceeded</strong>: Anonymous user hit the limit; try registering</li>
-          <li><strong>No response</strong>: Check if the AI mock mode is enabled; check server console for errors</li>
-        </ul>
+      <Section id="guardrails" title="Operational Guardrails" icon="🛡️">
+        <div className="space-y-4">
+          <div>
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">Rate Limiting</h4>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-lg bg-zinc-100 p-3 text-center dark:bg-zinc-800">
+                <div className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">3/day</div>
+                <div className="text-xs text-zinc-500">Anonymous</div>
+              </div>
+              <div className="rounded-lg bg-zinc-100 p-3 text-center dark:bg-zinc-800">
+                <div className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">5/min</div>
+                <div className="text-xs text-zinc-500">Free Users</div>
+              </div>
+              <div className="rounded-lg bg-zinc-100 p-3 text-center dark:bg-zinc-800">
+                <div className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">20/min</div>
+                <div className="text-xs text-zinc-500">Pro Users</div>
+              </div>
+            </div>
+          </div>
 
-        <h3>Streaming Output Not Showing</h3>
-        <ul>
-          <li><strong>Text appears all at once</strong>: The SSE stream might not be parsing correctly; check the response content type</li>
-          <li><strong>Nothing appears</strong>: The fetch request might be failing silently; check browser console</li>
-          <li><strong>Partial output</strong>: The stream might be closing early; check server logs for errors</li>
-        </ul>
+          <div>
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">Credits Policy</h4>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="flex items-center gap-3 rounded-lg bg-green-50 p-3 dark:bg-green-900/20">
+                <span className="text-2xl">🎁</span>
+                <div>
+                  <div className="font-medium text-zinc-900 dark:text-zinc-100">100 credits</div>
+                  <div className="text-xs text-zinc-500">Free signup bonus</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 rounded-lg bg-blue-50 p-3 dark:bg-blue-900/20">
+                <span className="text-2xl">💎</span>
+                <div>
+                  <div className="font-medium text-zinc-900 dark:text-zinc-100">1000 credits</div>
+                  <div className="text-xs text-zinc-500">Pro monthly</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <h3>Database Issues</h3>
-        <ul>
-          <li><strong>Tables not found</strong>: Run all migration files in order</li>
-          <li><strong>Permission denied</strong>: Check RLS policies; service role key might be needed for admin operations</li>
-          <li><strong>Function not found</strong>: The functions migration file might not have run; check for get_user_status</li>
-        </ul>
-      </section>
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
+            <h4 className="mb-2 flex items-center gap-2 font-medium text-amber-800 dark:text-amber-200">
+              <span>⚠️</span> Anonymous Abuse Risk
+            </h4>
+            <div className="space-y-1 text-sm text-amber-700 dark:text-amber-300">
+              <ListItem>Reduce <Code>ANONYMOUS_QUOTA</Code> to 1 or 0</ListItem>
+              <ListItem>Require registration for AI features</ListItem>
+              <ListItem>Monitor anonymous_quotas table</ListItem>
+            </div>
+          </div>
+        </div>
+      </Section>
 
-      {/* Section 5: Documentation */}
-      <section>
-        <h2>5. Documentation</h2>
-        <ul>
-          <li><strong>README.md</strong> - Quick start guide</li>
-          <li><strong>docs/MAKE-IT-YOURS.md</strong> - Complete customization guide</li>
-          <li><strong>docs/env-variables.md</strong> - All environment variables reference</li>
-          <li><strong>docs/OPERATING-GUIDE.md</strong> - Production best practices</li>
-          <li><strong>supabase/README.md</strong> - Database schema documentation</li>
-        </ul>
-      </section>
-    </article>
+      <Section id="troubleshooting" title="Troubleshooting" icon="🔧">
+        <div className="space-y-4">
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 flex items-center gap-2 font-medium text-zinc-900 dark:text-zinc-100">
+              <span>🔐</span> Login Issues
+            </h4>
+            <div className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <ListItem><strong>Can&apos;t log in:</strong> Check Supabase URL and anon key</ListItem>
+              <ListItem><strong>Session lost:</strong> Verify cookies enabled</ListItem>
+              <ListItem><strong>Stuck loading:</strong> Check network tab for errors</ListItem>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 flex items-center gap-2 font-medium text-zinc-900 dark:text-zinc-100">
+              <span>💰</span> Credits Issues
+            </h4>
+            <div className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <ListItem><strong>Balance unchanged:</strong> Check user status API calls</ListItem>
+              <ListItem><strong>Wrong balance:</strong> Clear browser cache</ListItem>
+              <ListItem><strong>No credits:</strong> Check signup trigger fired</ListItem>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 flex items-center gap-2 font-medium text-zinc-900 dark:text-zinc-100">
+              <span>⚡</span> Generation Failures
+            </h4>
+            <div className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <ListItem><strong>Insufficient credits:</strong> Check credits table</ListItem>
+              <ListItem><strong>DB not configured:</strong> Check env variables</ListItem>
+              <ListItem><strong>Quota exceeded:</strong> Anonymous limit hit, register</ListItem>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 flex items-center gap-2 font-medium text-zinc-900 dark:text-zinc-100">
+              <span>🗄️</span> Database Issues
+            </h4>
+            <div className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <ListItem><strong>Tables not found:</strong> Run migrations in order</ListItem>
+              <ListItem><strong>Permission denied:</strong> Check RLS policies</ListItem>
+              <ListItem><strong>Function missing:</strong> Run functions migration</ListItem>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section id="docs" title="Documentation" icon="📚">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link href="/readme/docs/readme" className="group flex items-center gap-3 rounded-lg border border-zinc-200 p-4 transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:shadow-sm dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800">
+            <span className="text-2xl">📖</span>
+            <div>
+              <div className="font-medium text-zinc-900 group-hover:text-zinc-700 dark:text-zinc-100">README.md</div>
+              <div className="text-xs text-zinc-500">Quick start guide</div>
+            </div>
+          </Link>
+          <Link href="/readme/docs/env-variables" className="group flex items-center gap-3 rounded-lg border border-zinc-200 p-4 transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:shadow-sm dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800">
+            <span className="text-2xl">⚙️</span>
+            <div>
+              <div className="font-medium text-zinc-900 group-hover:text-zinc-700 dark:text-zinc-100">env-variables.md</div>
+              <div className="text-xs text-zinc-500">Environment reference</div>
+            </div>
+          </Link>
+          <Link href="/readme/docs/database" className="group flex items-center gap-3 rounded-lg border border-zinc-200 p-4 transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:shadow-sm dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800">
+            <span className="text-2xl">🗄️</span>
+            <div>
+              <div className="font-medium text-zinc-900 group-hover:text-zinc-700 dark:text-zinc-100">supabase/README.md</div>
+              <div className="text-xs text-zinc-500">Database schema</div>
+            </div>
+          </Link>
+        </div>
+      </Section>
+    </>
   )
 }
 
 function ContentZH() {
   return (
-    <article className="prose prose-zinc dark:prose-invert max-w-none">
-      <h1>快速上手指南</h1>
-
-      {/* Section 1: Quick Start */}
-      <section>
-        <h2>1. 三分钟快速跑通</h2>
-        <p>
-          按照以下步骤体验完整流程：登录、生成内容、看到额度扣减、触发额度不足提示。
+    <>
+      <Section id="quick-start" title="快速上手" icon="🚀" defaultOpen={true}>
+        <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+          体验完整流程：登录 → 生成 → 额度扣减 → 额度不足提示。
         </p>
 
-        <h3>步骤一：配置环境</h3>
-        <ol>
-          <li>复制 <code>.env.example</code> 为 <code>.env</code></li>
-          <li>从 Supabase 控制台获取项目 URL 和密钥</li>
-          <li>填写所有 <code>NEXT_PUBLIC_*</code> 变量配置你的品牌信息</li>
-        </ol>
+        <div className="space-y-4">
+          <StepCard step={1} title="配置环境">
+            <ListItem>复制 <Code>.env.example</Code> 为 <Code>.env</Code></ListItem>
+            <ListItem>从 Supabase 控制台获取项目 URL 和密钥</ListItem>
+            <ListItem>填写 <Code>NEXT_PUBLIC_*</Code> 变量配置品牌信息</ListItem>
+          </StepCard>
 
-        <h3>步骤二：初始化数据库</h3>
-        <ol>
-          <li>进入 Supabase 项目的 SQL 编辑器</li>
-          <li>按顺序执行迁移文件（migrations 目录下共 8 个文件）</li>
-          <li>验证表已创建：system_config、plans、user_profiles、credits 等</li>
-        </ol>
+          <StepCard step={2} title="初始化数据库">
+            <ListItem>进入 Supabase SQL 编辑器</ListItem>
+            <ListItem>按顺序执行 8 个迁移文件</ListItem>
+            <ListItem>验证表已创建：system_config、plans、user_profiles、credits</ListItem>
+          </StepCard>
 
-        <h3>步骤三：启动并测试</h3>
-        <ol>
-          <li>运行 <code>pnpm install</code> 安装依赖</li>
-          <li>运行 <code>pnpm dev</code> 启动开发服务器</li>
-          <li>在浏览器中打开首页</li>
-          <li>注册新账号</li>
-          <li>在首页使用文字转表情演示</li>
-          <li>查看控制台确认额度变化</li>
-          <li>持续生成直到额度耗尽，观察拦截提示</li>
-        </ol>
-      </section>
+          <StepCard step={3} title="启动并测试">
+            <ListItem>运行 <Code>pnpm install</Code> 然后 <Code>pnpm dev</Code></ListItem>
+            <ListItem>在首页注册新账号</ListItem>
+            <ListItem>使用文字转表情演示，观察额度变化</ListItem>
+            <ListItem>持续生成直到额度耗尽，观察拦截提示</ListItem>
+          </StepCard>
+        </div>
+      </Section>
 
-      {/* Section 2: Make It Yours */}
-      <section>
-        <h2>2. 改成你的产品（零代码品牌配置）</h2>
-
-        <h3>环境变量配置</h3>
-        <p>所有品牌设置都通过 <code>.env</code> 配置，无需修改代码：</p>
-
-        <h4>应用与品牌</h4>
-        <ul>
-          <li><code>NEXT_PUBLIC_APP_NAME</code> - 产品名称</li>
-          <li><code>NEXT_PUBLIC_APP_LOGO</code> - Logo 表情或图片路径</li>
-          <li><code>NEXT_PUBLIC_APP_TAGLINE</code> - 品牌标语</li>
-          <li><code>NEXT_PUBLIC_COMPANY_NAME</code> - 页脚显示的公司名称</li>
-          <li><code>NEXT_PUBLIC_CONTACT_EMAIL</code> - 联系邮箱</li>
-          <li><code>NEXT_PUBLIC_CONTACT_TWITTER</code> - Twitter 账号</li>
-          <li><code>NEXT_PUBLIC_CONTACT_GITHUB</code> - GitHub 地址</li>
-        </ul>
-
-        <h4>SEO 配置</h4>
-        <ul>
-          <li><code>NEXT_PUBLIC_SEO_TITLE</code> - 默认页面标题</li>
-          <li><code>NEXT_PUBLIC_SEO_DESCRIPTION</code> - Meta 描述</li>
-          <li><code>NEXT_PUBLIC_SEO_KEYWORDS</code> - 关键词（逗号分隔）</li>
-          <li><code>NEXT_PUBLIC_OG_LOCALE</code> - OpenGraph 语言</li>
-          <li><code>NEXT_PUBLIC_TWITTER_SITE</code> - Twitter 卡片网站账号</li>
-          <li><code>NEXT_PUBLIC_TWITTER_CREATOR</code> - Twitter 卡片创作者账号</li>
-        </ul>
-
-        <h3>配置文件（高级）</h3>
-        <p>如需超出环境变量范围的高级自定义：</p>
-        <ul>
-          <li><code>src/config/site.ts</code> - 品牌、联系方式、法律、功能开关</li>
-          <li><code>src/config/seo.ts</code> - SEO、OpenGraph、Twitter、页面元数据</li>
-          <li><code>src/config/plans.ts</code> - 方案定义和功能</li>
-          <li><code>src/config/credits.ts</code> - Credits 系统规则</li>
-        </ul>
-
-        <h3>替换首页演示</h3>
-        <p>演示组件位于 <code>src/components/demo/</code>：</p>
-        <ol>
-          <li>当前演示是文字转表情，可作为结构参考</li>
-          <li>按照相同模式创建你自己的演示组件</li>
-          <li>演示应调用 <code>/api/ai/generate</code> 接口</li>
-          <li>处理流式响应并显示进度</li>
-          <li>在生成前后显示额度状态</li>
-          <li>在首页替换演示组件的引入</li>
-        </ol>
-
-        <h3>调整方案和权益</h3>
-        <p>方案定义在两个地方：</p>
-        <ul>
-          <li><strong>数据库</strong>：plans 和 plan_entitlements 表是真实数据源</li>
-          <li><strong>配置文件</strong>：<code>src/config/plans.ts</code> 提供客户端类型定义</li>
-        </ul>
-        <p>添加新方案或修改权益时，需同时更新数据库种子数据和配置文件。</p>
-      </section>
-
-      {/* Section 3: Operational Guardrails */}
-      <section>
-        <h2>3. 运营护栏</h2>
-
-        <h3>默认限流策略</h3>
-        <ul>
-          <li><strong>匿名用户</strong>：每天 3 次请求（通过 <code>ANONYMOUS_QUOTA</code> 配置）</li>
-          <li><strong>免费用户</strong>：每分钟 5 次，每小时 50 次</li>
-          <li><strong>Pro 用户</strong>：每分钟 20 次，每小时 500 次</li>
-        </ul>
-
-        <h3>默认额度策略</h3>
-        <ul>
-          <li>新免费用户注册时获得 100 额度</li>
-          <li>Pro 用户每月获得 1000 额度</li>
-          <li>每次 AI 生成消耗 1 额度</li>
-          <li>余额为零时，生成被拦截</li>
-        </ul>
-
-        <h3>匿名滥用风险</h3>
-        <p>
-          匿名用户无需注册即可试用演示。这是为了提高转化率，但存在滥用风险。
-          默认每天 3 次的限制比较保守。如果发现滥用：
+      <Section id="branding" title="品牌定制" icon="🎨">
+        <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+          所有品牌设置通过 <Code>.env</Code> 配置，无需修改代码。
         </p>
-        <ul>
-          <li>将 <code>ANONYMOUS_QUOTA</code> 减少到 1 或 0</li>
-          <li>考虑要求所有 AI 功能必须注册</li>
-          <li>监控 anonymous_quotas 表中的可疑模式</li>
-        </ul>
 
-        <h3>调整默认额度</h3>
-        <p>修改新用户默认额度：</p>
-        <ul>
-          <li>更新环境配置中的 <code>DEFAULT_FREE_CREDITS</code></li>
-          <li>同时更新数据库 system_config 表（key: default_credits）</li>
-          <li>现有用户不受影响，只有新注册用户获得新额度</li>
-        </ul>
-      </section>
+        <div className="space-y-4">
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">应用与品牌</h4>
+            <div className="grid gap-2 text-sm sm:grid-cols-2">
+              <div className="flex items-center gap-2">
+                <Code>APP_NAME</Code>
+                <span className="text-zinc-500">产品名称</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>APP_LOGO</Code>
+                <span className="text-zinc-500">Logo 表情/路径</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>APP_TAGLINE</Code>
+                <span className="text-zinc-500">品牌标语</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>COMPANY_NAME</Code>
+                <span className="text-zinc-500">页脚公司名</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>CONTACT_EMAIL</Code>
+                <span className="text-zinc-500">联系邮箱</span>
+              </div>
+            </div>
+          </div>
 
-      {/* Section 4: Troubleshooting */}
-      <section>
-        <h2>4. 常见问题排障</h2>
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">SEO 配置</h4>
+            <div className="grid gap-2 text-sm sm:grid-cols-2">
+              <div className="flex items-center gap-2">
+                <Code>SEO_TITLE</Code>
+                <span className="text-zinc-500">页面标题</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>SEO_DESCRIPTION</Code>
+                <span className="text-zinc-500">Meta 描述</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>SEO_KEYWORDS</Code>
+                <span className="text-zinc-500">关键词</span>
+              </div>
+            </div>
+          </div>
 
-        <h3>登录/会话问题</h3>
-        <ul>
-          <li><strong>无法登录</strong>：检查 Supabase URL 和 anon key 是否正确设置</li>
-          <li><strong>会话不保持</strong>：确认 Cookie 已启用；检查浏览器控制台是否有错误</li>
-          <li><strong>卡在加载中</strong>：AuthProvider 可能在等待 Supabase；检查网络请求标签页</li>
-        </ul>
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">配置文件（高级）</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <Code>src/config/site.ts</Code>
+                <span className="text-zinc-500">品牌、联系方式、法律</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>src/config/seo.ts</Code>
+                <span className="text-zinc-500">SEO、OpenGraph</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>src/config/plans.ts</Code>
+                <span className="text-zinc-500">方案定义</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code>src/config/credits.ts</Code>
+                <span className="text-zinc-500">额度规则</span>
+              </div>
+            </div>
+          </div>
 
-        <h3>额度不刷新</h3>
-        <ul>
-          <li><strong>生成后余额不变</strong>：用户状态接口应被调用；检查控制台网络请求</li>
-          <li><strong>显示错误余额</strong>：清除浏览器缓存；credits 表可能有过时数据</li>
-          <li><strong>新用户没有额度</strong>：检查注册触发器是否执行；查看 credit_ledger 表</li>
-        </ul>
+          <StepCard step={1} title="替换首页演示">
+            <ListItem>演示组件在 <Code>src/components/demo/</Code></ListItem>
+            <ListItem>调用 <Code>/api/ai/generate</Code> 接口</ListItem>
+            <ListItem>处理流式响应</ListItem>
+            <ListItem>生成前后显示额度</ListItem>
+          </StepCard>
+        </div>
+      </Section>
 
-        <h3>生成失败</h3>
-        <ul>
-          <li><strong>错误：额度不足</strong>：检查用户的 credits 表；余额可能为零</li>
-          <li><strong>错误：数据库未配置</strong>：Supabase 环境变量缺失或无效</li>
-          <li><strong>错误：每日配额超限</strong>：匿名用户达到限制；尝试注册账号</li>
-          <li><strong>无响应</strong>：检查 AI mock 模式是否启用；检查服务器控制台错误</li>
-        </ul>
+      <Section id="guardrails" title="运营护栏" icon="🛡️">
+        <div className="space-y-4">
+          <div>
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">限流策略</h4>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-lg bg-zinc-100 p-3 text-center dark:bg-zinc-800">
+                <div className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">3次/天</div>
+                <div className="text-xs text-zinc-500">匿名用户</div>
+              </div>
+              <div className="rounded-lg bg-zinc-100 p-3 text-center dark:bg-zinc-800">
+                <div className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">5次/分钟</div>
+                <div className="text-xs text-zinc-500">免费用户</div>
+              </div>
+              <div className="rounded-lg bg-zinc-100 p-3 text-center dark:bg-zinc-800">
+                <div className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">20次/分钟</div>
+                <div className="text-xs text-zinc-500">Pro 用户</div>
+              </div>
+            </div>
+          </div>
 
-        <h3>流式输出不显示</h3>
-        <ul>
-          <li><strong>文字一次性出现</strong>：SSE 流可能解析不正确；检查响应 Content-Type</li>
-          <li><strong>什么都不显示</strong>：fetch 请求可能静默失败；检查浏览器控制台</li>
-          <li><strong>只有部分输出</strong>：流可能提前关闭；检查服务器日志错误</li>
-        </ul>
+          <div>
+            <h4 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">额度策略</h4>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="flex items-center gap-3 rounded-lg bg-green-50 p-3 dark:bg-green-900/20">
+                <span className="text-2xl">🎁</span>
+                <div>
+                  <div className="font-medium text-zinc-900 dark:text-zinc-100">100 额度</div>
+                  <div className="text-xs text-zinc-500">免费注册赠送</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 rounded-lg bg-blue-50 p-3 dark:bg-blue-900/20">
+                <span className="text-2xl">💎</span>
+                <div>
+                  <div className="font-medium text-zinc-900 dark:text-zinc-100">1000 额度</div>
+                  <div className="text-xs text-zinc-500">Pro 每月</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <h3>数据库问题</h3>
-        <ul>
-          <li><strong>找不到表</strong>：按顺序执行所有迁移文件</li>
-          <li><strong>权限被拒绝</strong>：检查 RLS 策略；管理操作可能需要 service role key</li>
-          <li><strong>找不到函数</strong>：函数迁移文件可能未执行；检查 get_user_status 是否存在</li>
-        </ul>
-      </section>
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
+            <h4 className="mb-2 flex items-center gap-2 font-medium text-amber-800 dark:text-amber-200">
+              <span>⚠️</span> 匿名滥用风险
+            </h4>
+            <div className="space-y-1 text-sm text-amber-700 dark:text-amber-300">
+              <ListItem>将 <Code>ANONYMOUS_QUOTA</Code> 减少到 1 或 0</ListItem>
+              <ListItem>要求所有 AI 功能必须注册</ListItem>
+              <ListItem>监控 anonymous_quotas 表</ListItem>
+            </div>
+          </div>
+        </div>
+      </Section>
 
-      {/* Section 5: Documentation */}
-      <section>
-        <h2>5. 文档索引</h2>
-        <ul>
-          <li><strong>README-zh.md</strong> - 快速上手指南</li>
-          <li><strong>docs/MAKE-IT-YOURS-zh.md</strong> - 完整定制化指南</li>
-          <li><strong>docs/env-variables.md</strong> - 环境变量完整参考</li>
-          <li><strong>docs/OPERATING-GUIDE.md</strong> - 生产环境最佳实践</li>
-          <li><strong>supabase/README.md</strong> - 数据库结构文档</li>
-        </ul>
-      </section>
-    </article>
+      <Section id="troubleshooting" title="问题排障" icon="🔧">
+        <div className="space-y-4">
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 flex items-center gap-2 font-medium text-zinc-900 dark:text-zinc-100">
+              <span>🔐</span> 登录问题
+            </h4>
+            <div className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <ListItem><strong>无法登录：</strong>检查 Supabase URL 和 anon key</ListItem>
+              <ListItem><strong>会话丢失：</strong>确认 Cookie 已启用</ListItem>
+              <ListItem><strong>卡在加载：</strong>检查网络请求标签页</ListItem>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 flex items-center gap-2 font-medium text-zinc-900 dark:text-zinc-100">
+              <span>💰</span> 额度问题
+            </h4>
+            <div className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <ListItem><strong>余额不变：</strong>检查用户状态 API 调用</ListItem>
+              <ListItem><strong>余额错误：</strong>清除浏览器缓存</ListItem>
+              <ListItem><strong>没有额度：</strong>检查注册触发器是否执行</ListItem>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 flex items-center gap-2 font-medium text-zinc-900 dark:text-zinc-100">
+              <span>⚡</span> 生成失败
+            </h4>
+            <div className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <ListItem><strong>额度不足：</strong>检查 credits 表</ListItem>
+              <ListItem><strong>数据库未配置：</strong>检查环境变量</ListItem>
+              <ListItem><strong>配额超限：</strong>匿名用户达到限制，注册账号</ListItem>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <h4 className="mb-3 flex items-center gap-2 font-medium text-zinc-900 dark:text-zinc-100">
+              <span>🗄️</span> 数据库问题
+            </h4>
+            <div className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <ListItem><strong>找不到表：</strong>按顺序执行迁移文件</ListItem>
+              <ListItem><strong>权限被拒绝：</strong>检查 RLS 策略</ListItem>
+              <ListItem><strong>函数缺失：</strong>执行函数迁移文件</ListItem>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section id="docs" title="文档索引" icon="📚">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link href="/readme/docs/readme-zh" className="group flex items-center gap-3 rounded-lg border border-zinc-200 p-4 transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:shadow-sm dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800">
+            <span className="text-2xl">📖</span>
+            <div>
+              <div className="font-medium text-zinc-900 group-hover:text-zinc-700 dark:text-zinc-100">README-zh.md</div>
+              <div className="text-xs text-zinc-500">快速上手指南</div>
+            </div>
+          </Link>
+          <Link href="/readme/docs/env-variables" className="group flex items-center gap-3 rounded-lg border border-zinc-200 p-4 transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:shadow-sm dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800">
+            <span className="text-2xl">⚙️</span>
+            <div>
+              <div className="font-medium text-zinc-900 group-hover:text-zinc-700 dark:text-zinc-100">env-variables.md</div>
+              <div className="text-xs text-zinc-500">环境变量参考</div>
+            </div>
+          </Link>
+          <Link href="/readme/docs/database" className="group flex items-center gap-3 rounded-lg border border-zinc-200 p-4 transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:shadow-sm dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800">
+            <span className="text-2xl">🗄️</span>
+            <div>
+              <div className="font-medium text-zinc-900 group-hover:text-zinc-700 dark:text-zinc-100">supabase/README.md</div>
+              <div className="text-xs text-zinc-500">数据库结构</div>
+            </div>
+          </Link>
+        </div>
+      </Section>
+    </>
   )
 }
