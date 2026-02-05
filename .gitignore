@@ -21,6 +21,10 @@ next-env.d.ts
 npm-debug.log*
 pnpm-debug.log*
 
+# Lingo.dev (keep cache, ignore dev files)
+src/lingo/metadata-dev.json
+src/lingo/translation-server.log
+
 # IDE & Editor
 .idea/
 .vscode/

@@ -1,20 +1,23 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { I18nProvider } from '@/lib/i18n'
 import { AuthProvider } from '@/components/auth'
 import { Header, Footer } from '@/components/layout'
+import type { Locale } from '@/lib/i18n/config'
 
-export function Providers({ children }: { children: ReactNode }) {
+interface ProvidersProps {
+  children: ReactNode
+  locale?: Locale
+}
+
+export function Providers({ children, locale = 'en' }: ProvidersProps) {
   return (
-    <I18nProvider>
-      <AuthProvider>
-        <Header />
-        <main className="min-h-[calc(100vh-8rem)]">
-          {children}
-        </main>
-        <Footer />
-      </AuthProvider>
-    </I18nProvider>
+    <AuthProvider>
+      <Header locale={locale} />
+      <main className="min-h-[calc(100vh-8rem)]">
+        {children}
+      </main>
+      <Footer locale={locale} />
+    </AuthProvider>
   )
 }

@@ -43,6 +43,10 @@ const supabaseServiceKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY', '')
 // Validate Supabase URL is a real URL (not placeholder)
 const isSupabaseUrlValid = isValidUrl(supabaseUrl)
 
+// Database config
+const databaseType = getEnvVar('DATABASE_TYPE', 'supabase') as 'supabase' | 'postgresql' | 'mysql'
+const databaseUrl = getEnvVar('DATABASE_URL', '')
+
 export const env = {
   // App
   app: {
@@ -50,6 +54,15 @@ export const env = {
     name: getEnvVar('NEXT_PUBLIC_APP_NAME', 'Next-AI SaaS'),
     mode: getEnvVar('APP_MODE', 'development') as 'development' | 'production' | 'test' | 'mock',
     enableMock: getEnvVarBool('ENABLE_MOCK', false),
+  },
+
+  // Database
+  database: {
+    type: databaseType,
+    url: databaseUrl,
+    isConfigured: databaseType === 'supabase'
+      ? (isSupabaseUrlValid && !!supabaseAnonKey)
+      : !!databaseUrl,
   },
 
   // Supabase (optional - app works without it in mock mode)
@@ -84,6 +97,13 @@ export const env = {
   features: {
     // /readme page: only enabled in development by default
     enableReadmePage: getEnvVarBool('ENABLE_README_PAGE', getEnvVar('APP_MODE', 'development') === 'development'),
+  },
+
+  // i18n Configuration
+  i18n: {
+    enabled: getEnvVarBool('NEXT_PUBLIC_I18N_ENABLED', true),
+    defaultLocale: getEnvVar('NEXT_PUBLIC_DEFAULT_LOCALE', 'en'),
+    supportedLocales: getEnvVar('NEXT_PUBLIC_SUPPORTED_LOCALES', 'en,zh'),
   },
 } as const
 

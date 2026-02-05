@@ -1,0 +1,164 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "error": "出错了",
+    "result": "结果"
+  },
+  "nav": {
+    "home": "首页",
+    "pricing": "定价",
+    "faq": "常见问题",
+    "legal": "法律条款",
+    "login": "登录",
+    "signup": "注册",
+    "logout": "退出",
+    "dashboard": "控制台"
+  },
+  "home": {
+    "title": "文字转表情",
+    "description": "AI 驱动的文字转换，触手可及",
+    "getStarted": "立即开始"
+  },
+  "demo": {
+    "title": "文字转表情",
+    "credits": "积分: {balance}",
+    "anonymousQuota": "匿名配额可用",
+    "placeholder": "输入要转换的文字...",
+    "generate": "生成",
+    "generating": "生成中...",
+    "signInForMore": "登录获取更多积分",
+    "quotaRemaining": "{remaining} / {limit} 匿名配额",
+    "creditsDeducted": "-{deducted} 积分 (剩余 {balance})"
+  },
+  "pricing": {
+    "title": "定价",
+    "subtitle": "选择适合您的方案",
+    "free": {
+      "name": "免费版",
+      "description": "适合体验试用",
+      "price": "$0",
+      "period": "/月",
+      "features": {
+        "credits": "注册即送 100 积分",
+        "rateLimit": "每分钟 5 次请求",
+        "models": "基础 AI 模型",
+        "support": "社区支持"
+      },
+      "cta": "立即开始"
+    },
+    "pro": {
+      "name": "专业版",
+      "description": "适合高级用户",
+      "price": "$19",
+      "period": "/月",
+      "badge": "最受欢迎",
+      "features": {
+        "credits": "每月 1000 积分",
+        "rateLimit": "每分钟 20 次请求",
+        "models": "高级 AI 模型",
+        "support": "优先支持",
+        "api": "API 访问"
+      },
+      "cta": "升级到专业版"
+    }
+  },
+  "faq": {
+    "title": "常见问题",
+    "subtitle": "查找常见问题的答案",
+    "items": {
+      "whatIs": {
+        "question": "什么是 Next-AI SaaS？",
+        "answer": "Next-AI SaaS 是一个提供 AI 驱动的文字转换服务的平台。您可以将文字转换为表情符号等。"
+      },
+      "credits": {
+        "question": "积分如何运作？",
+        "answer": "每次 AI 生成消耗 1 积分。免费用户注册时获得 100 积分。专业版用户每月获得 1000 积分。"
+      },
+      "upgrade": {
+        "question": "我可以随时升级方案吗？",
+        "answer": "是的，您可以随时从免费版升级到专业版。您的新权益将立即生效。"
+      },
+      "privacy": {
+        "question": "我的数据如何受到保护？",
+        "answer": "我们非常重视数据隐私。您的数据在传输和存储时都经过加密，绝不会与第三方共享。"
+      },
+      "outOfCredits": {
+        "question": "积分用完会怎样？",
+        "answer": "当您的积分归零时，您将无法生成新内容，直到获得更多积分或升级您的方案。"
+      }
+    }
+  },
+  "legal": {
+    "title": "法律条款",
+    "terms": {
+      "title": "服务条款",
+      "intro": "访问和使用本服务即表示您同意受这些服务条款的约束。",
+      "acceptableUse": {
+        "title": "1. 可接受的使用",
+        "content": "您同意仅将本服务用于合法目的，并遵守这些条款。"
+      },
+      "accountResponsibility": {
+        "title": "2. 账户责任",
+        "content": "您有责任维护账户凭证的机密性。"
+      },
+      "serviceAvailability": {
+        "title": "3. 服务可用性",
+        "content": "我们努力提供不间断的服务，但不保证 100% 的正常运行时间。"
+      },
+      "modifications": {
+        "title": "4. 修改",
+        "content": "我们保留随时修改这些条款的权利。"
+      }
+    },
+    "privacy": {
+      "title": "隐私政策",
+      "intro": "本隐私政策描述了我们如何收集、使用和保护您的个人信息。",
+      "collection": {
+        "title": "1. 我们收集的信息",
+        "content": "我们收集您直接提供的信息，如电子邮件地址和使用数据。"
+      },
+      "usage": {
+        "title": "2. 我们如何使用您的信息",
+        "content": "我们使用您的信息来提供和改进我们的服务，并与您沟通。"
+      },
+      "security": {
+        "title": "3. 数据安全",
+        "content": "我们实施适当的安全措施来保护您的个人信息。"
+      },
+      "retention": {
+        "title": "4. 数据保留",
+        "content": "我们仅在提供服务所需的时间内保留您的数据。"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "欢迎回来",
+      "subtitle": "登录您的账户",
+      "email": "邮箱",
+      "emailPlaceholder": "you@example.com",
+      "password": "密码",
+      "passwordPlaceholder": "••••••••",
+      "submit": "登录",
+      "noAccount": "还没有账户？",
+      "signupLink": "注册"
+    },
+    "signup": {
+      "title": "创建账户",
+      "subtitle": "开始使用您的免费账户",
+      "displayName": "显示名称",
+      "displayNamePlaceholder": "您的名字",
+      "email": "邮箱",
+      "emailPlaceholder": "you@example.com",
+      "password": "密码",
+      "passwordPlaceholder": "••••••••",
+      "submit": "创建账户",
+      "hasAccount": "已有账户？",
+      "loginLink": "登录",
+      "success": {
+        "title": "账户创建成功！",
+        "message": "正在跳转到登录页面..."
+      }
+    }
+  }
+}

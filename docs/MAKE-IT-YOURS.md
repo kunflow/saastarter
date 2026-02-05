@@ -148,7 +148,7 @@ if (type === 'your-type') {
 
 ### 2.4 Update Home Page
 
-Edit `src/app/page.tsx` to use your demo:
+Edit `src/app/[locale]/page.tsx` to use your demo:
 
 ```typescript
 import YourDemo from '@/components/demo/your-demo'
@@ -238,36 +238,202 @@ WHERE plan_id = (SELECT id FROM plans WHERE slug = 'free');
 
 ### 5.1 Pricing Page
 
-Edit `src/app/(marketing)/pricing/pricing-content.tsx`:
+Edit `src/app/[locale]/(marketing)/pricing/pricing-content.tsx`:
 - Update plan features
 - Adjust pricing display
 
 ### 5.2 FAQ Page
 
-Edit `src/app/(marketing)/faq/faq-content.tsx`:
+Edit `src/app/[locale]/(marketing)/faq/faq-content.tsx`:
 - Replace questions with your product-specific FAQs
 
 ### 5.3 Legal Page
 
-Edit `src/app/(marketing)/legal/legal-content.tsx`:
+Edit `src/app/[locale]/(marketing)/legal/legal-content.tsx`:
 - Update Terms of Service
 - Update Privacy Policy
 
-## Step 6: Deploy (15 min)
+## Step 6: Configure i18n (Optional, 10 min)
 
-### 6.1 Deploy to Vercel
+### 6.1 i18n Modes
+
+The template supports three i18n modes:
+
+| Mode | Configuration | URL Structure | Language Switcher |
+|------|---------------|---------------|-------------------|
+| Single Language | `NEXT_PUBLIC_I18N_ENABLED=false` | `/pricing` | Hidden |
+| Multi-language (Manual) | `NEXT_PUBLIC_I18N_ENABLED=true` | `/en/pricing`, `/zh/pricing` | Visible |
+| Multi-language (Auto) | Same + Lingo.dev CLI | Same | Visible |
+
+### 6.2 Configure Environment
+
+```env
+# Enable/disable multi-language support
+NEXT_PUBLIC_I18N_ENABLED=true
+
+# Default locale
+NEXT_PUBLIC_DEFAULT_LOCALE=en
+
+# Supported locales (comma-separated)
+NEXT_PUBLIC_SUPPORTED_LOCALES=en,zh
+```
+
+### 6.3 Translation Files
+
+Translation files are located in `messages/` directory:
+- `messages/en.json` - English translations
+- `messages/zh.json` - Chinese translations
+
+Edit these files directly to customize translations.
+
+### 6.4 Auto Translation with Lingo.dev CLI (Optional)
+
+1. Install CLI:
+   ```bash
+   pnpm add -D @lingo.dev/cli
+   ```
+
+2. Create `lingo.config.json`:
+   ```json
+   {
+     "version": 1,
+     "locale": { "source": "en", "targets": ["zh"] },
+     "buckets": {
+       "json": { "include": ["messages/[locale].json"] }
+     }
+   }
+   ```
+
+3. Run translation:
+   ```bash
+   LINGODOTDEV_API_KEY=your-api-key npx lingo translate
+   ```
+
+## Step 7: Deploy (15 min)
+
+### Option 1: Deploy to Vercel (Recommended)
 
 ```bash
 vercel
 ```
 
-### 6.2 Configure Production Environment
-
 Set environment variables in Vercel dashboard:
 - All variables from `.env.example`
 - `NEXT_PUBLIC_APP_URL` = your production URL
+- `LINGODOTDEV_API_KEY` = your Lingo.dev API key (if using translations)
 
-### 6.3 Run Database Migrations
+### Option 2: Self-Hosted Deployment
+
+#### 7.2.1 Build for Production
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build (translations are auto-generated)
+pnpm build
+```
+
+#### 7.2.2 Run with Node.js
+
+```bash
+# Start production server
+pnpm start
+```
+
+Default port is 3000, change with `PORT` environment variable:
+
+```bash
+PORT=8080 pnpm start
+```
+
+#### 7.2.3 Use PM2 for Process Management
+
+```bash
+# Install PM2
+npm install -g pm2
+
+# Start application
+pm2 start npm --name "my-saas" -- start
+
+# Check status
+pm2 status
+
+# View logs
+pm2 logs my-saas
+
+# Enable startup on boot
+pm2 startup
+pm2 save
+```
+
+#### 7.2.4 Docker Deployment
+
+Create `Dockerfile`:
+
+```dockerfile
+FROM node:20-alpine AS base
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Dependencies stage
+FROM base AS deps
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# Build stage
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN pnpm build
+
+# Runner stage
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+Build and run:
+
+```bash
+# Build image
+docker build -t my-saas .
+
+# Run container
+docker run -p 3000:3000 --env-file .env my-saas
+```
+
+#### 7.2.5 Nginx Reverse Proxy
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+### 7.3 Run Database Migrations
 
 Execute all migration files in your production Supabase project.
 
@@ -298,6 +464,7 @@ Execute all migration files in your production Supabase project.
 - [ ] Mock mode disabled
 - [ ] Plans customized
 - [ ] Marketing pages updated
+- [ ] i18n configured (optional)
 - [ ] Deployed to production
 - [ ] Production environment variables set
 - [ ] Database migrations run
@@ -306,4 +473,4 @@ Execute all migration files in your production Supabase project.
 
 - Check the `/readme` route in development mode
 - Review `docs/env-variables.md` for all configuration options
-- Check `supabase/README.md` for database documentation
+- Check `database/supabase/README.md` for database documentation

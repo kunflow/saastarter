@@ -62,14 +62,14 @@ NEXT_PUBLIC_SEO_KEYWORDS=你的,关键词,列表
 
 在 Supabase SQL Editor 中按顺序执行迁移文件：
 
-1. `supabase/migrations/20260204100001_create_enums.sql`
-2. `supabase/migrations/20260204100002_create_config_tables.sql`
-3. `supabase/migrations/20260204100003_create_user_tables.sql`
-4. `supabase/migrations/20260204100004_create_ledger_tables.sql`
-5. `supabase/migrations/20260204100005_create_triggers.sql`
-6. `supabase/migrations/20260204100006_create_functions.sql`
-7. `supabase/migrations/20260204100007_create_rls_policies.sql`
-8. `supabase/migrations/20260204100008_seed_initial_data.sql`
+1. `database/supabase/migrations/20260204100001_create_enums.sql`
+2. `database/supabase/migrations/20260204100002_create_config_tables.sql`
+3. `database/supabase/migrations/20260204100003_create_user_tables.sql`
+4. `database/supabase/migrations/20260204100004_create_ledger_tables.sql`
+5. `database/supabase/migrations/20260204100005_create_triggers.sql`
+6. `database/supabase/migrations/20260204100006_create_functions.sql`
+7. `database/supabase/migrations/20260204100007_create_rls_policies.sql`
+8. `database/supabase/migrations/20260204100008_seed_initial_data.sql`
 
 ### 第四步：启动开发服务器
 
@@ -129,11 +129,12 @@ pnpm dev
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── (auth)/            # 登录、注册页面
-│   ├── (marketing)/       # 定价、FAQ、法律条款
-│   ├── api/               # API 路由
-│   ├── dashboard/         # 用户仪表板
-│   └── readme/            # 开发者指南（隐藏）
+│   ├── [locale]/          # 基于语言的路由 (en, zh)
+│   │   ├── (auth)/        # 登录、注册页面
+│   │   ├── (marketing)/   # 定价、FAQ、法律条款
+│   │   ├── dashboard/     # 用户仪表板
+│   │   └── readme/        # 开发者指南（隐藏）
+│   └── api/               # API 路由
 ├── components/            # React 组件
 ├── config/                # 配置文件
 │   ├── site.ts           # 网站配置
@@ -141,9 +142,37 @@ src/
 │   ├── env.ts            # 环境变量
 │   ├── credits.ts        # Credits 配置
 │   └── plans.ts          # Plans 配置
-├── lib/                   # 工具函数
-└── locales/               # i18n 翻译文件
+└── lib/                   # 工具函数
+    ├── supabase/         # Supabase 客户端
+    ├── ai/               # AI Gateway
+    └── i18n/             # 国际化配置
+
+messages/                  # 翻译文件
+├── en.json               # 英文翻译
+└── zh.json               # 中文翻译
 ```
+
+## 国际化 (i18n)
+
+应用支持英文 (en) 和中文 (zh)，使用基于 URL 的路由：
+- `/` 或 `/en/*` - 英文页面（默认）
+- `/zh/*` - 中文页面
+
+**i18n 模式：**
+
+| 模式 | 配置 | URL 结构 |
+|------|------|----------|
+| 单语言 | `NEXT_PUBLIC_I18N_ENABLED=false` | `/pricing` |
+| 多语言 | `NEXT_PUBLIC_I18N_ENABLED=true` | `/en/pricing`, `/zh/pricing` |
+
+**翻译文件：**
+- 位置：`messages/en.json`, `messages/zh.json`
+- 格式：语义化键（如 `home.title`, `nav.pricing`）
+
+**自动翻译（可选）：**
+1. 安装：`pnpm add -D @lingo.dev/cli`
+2. 配置 `lingo.config.json`
+3. 运行：`LINGODOTDEV_API_KEY=xxx npx lingo translate`
 
 ## 下一步
 

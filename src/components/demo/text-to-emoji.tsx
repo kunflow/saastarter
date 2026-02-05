@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useTranslation } from '@/lib/i18n'
+import { useTranslations } from 'next-intl'
 import { useAuth } from '@/components/auth'
 import { Button, Input, Card, CardContent } from '@/components/ui'
 
@@ -20,8 +20,9 @@ interface GenerateResult {
 }
 
 export function TextToEmojiDemo() {
-  const { t } = useTranslation()
   const { user, userStatus, refreshUserStatus } = useAuth()
+  const t = useTranslations('demo')
+  const tCommon = useTranslations('common')
 
   const [input, setInput] = useState('')
   const [result, setResult] = useState<GenerateResult | null>(null)
@@ -46,7 +47,7 @@ export function TextToEmojiDemo() {
 
       if (!response.ok) {
         const data = await response.json()
-        setError(data.error || t('errors.generic'))
+        setError(data.error || tCommon('error'))
         setLoading(false)
         return
       }
@@ -56,7 +57,7 @@ export function TextToEmojiDemo() {
       const decoder = new TextDecoder()
 
       if (!reader) {
-        setError(t('errors.generic'))
+        setError(tCommon('error'))
         setLoading(false)
         return
       }
@@ -99,11 +100,11 @@ export function TextToEmojiDemo() {
       }
     } catch (err) {
       console.error('Generate error:', err)
-      setError(t('errors.generic'))
+      setError(tCommon('error'))
     } finally {
       setLoading(false)
     }
-  }, [input, t, user, refreshUserStatus])
+  }, [input, user, refreshUserStatus, tCommon])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -116,12 +117,12 @@ export function TextToEmojiDemo() {
     <Card className="w-full max-w-md">
       <CardContent className="space-y-4 pt-6">
         <div className="text-center">
-          <h2 className="text-xl font-semibold">{t('demo.title')}</h2>
+          <h2 className="text-xl font-semibold">{t('title')}</h2>
           <p className="mt-1 text-sm text-zinc-500">
             {user ? (
-              <span>{t('demo.credits')}: <strong>{userStatus?.credits.balance ?? '...'}</strong></span>
+              <span>{t('credits', { balance: userStatus?.credits.balance ?? '...' })}</span>
             ) : (
-              <span>{t('demo.anonymousQuota')}</span>
+              <span>{t('anonymousQuota')}</span>
             )}
           </p>
         </div>
@@ -131,11 +132,11 @@ export function TextToEmojiDemo() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={t('demo.inputPlaceholder')}
+            placeholder={t('placeholder')}
             disabled={loading}
           />
           <Button onClick={handleGenerate} loading={loading} disabled={!input.trim()}>
-            {loading ? t('demo.generating') : t('demo.generate')}
+            {loading ? t('generating') : t('generate')}
           </Button>
         </div>
 
@@ -147,19 +148,19 @@ export function TextToEmojiDemo() {
 
         {(streamingEmoji || result) && (
           <div className="rounded-lg bg-zinc-50 p-6 text-center dark:bg-zinc-800/50">
-            <p className="mb-2 text-sm text-zinc-500">{t('demo.result')}</p>
+            <p className="mb-2 text-sm text-zinc-500">{tCommon('result')}</p>
             <div className="text-6xl">{streamingEmoji || result?.emoji}</div>
 
             {result && (
               <div className="mt-4 text-xs text-zinc-400">
                 {result.anonymous && result.quota && (
                   <span>
-                    {result.quota.remaining} / {result.quota.daily_limit} {t('demo.anonymousQuota')}
+                    {t('quotaRemaining', { remaining: result.quota.remaining, limit: result.quota.daily_limit })}
                   </span>
                 )}
                 {!result.anonymous && result.credits && (
                   <span>
-                    -{result.credits.deducted} {t('demo.credits')} ({result.credits.balance} remaining)
+                    {t('creditsDeducted', { deducted: result.credits.deducted, balance: result.credits.balance })}
                   </span>
                 )}
               </div>
@@ -169,7 +170,7 @@ export function TextToEmojiDemo() {
 
         {!user && (
           <p className="text-center text-xs text-zinc-400">
-            {t('demo.loginRequired')}
+            {t('signInForMore')}
           </p>
         )}
       </CardContent>

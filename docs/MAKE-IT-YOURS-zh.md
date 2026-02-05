@@ -148,7 +148,7 @@ if (type === 'your-type') {
 
 ### 2.4 更新首页
 
-编辑 `src/app/page.tsx` 使用你的演示：
+编辑 `src/app/[locale]/page.tsx` 使用你的演示：
 
 ```typescript
 import YourDemo from '@/components/demo/your-demo'
@@ -238,36 +238,202 @@ WHERE plan_id = (SELECT id FROM plans WHERE slug = 'free');
 
 ### 5.1 定价页面
 
-编辑 `src/app/(marketing)/pricing/pricing-content.tsx`：
+编辑 `src/app/[locale]/(marketing)/pricing/pricing-content.tsx`：
 - 更新方案功能
 - 调整价格显示
 
 ### 5.2 FAQ 页面
 
-编辑 `src/app/(marketing)/faq/faq-content.tsx`：
+编辑 `src/app/[locale]/(marketing)/faq/faq-content.tsx`：
 - 替换为你的产品相关的常见问题
 
 ### 5.3 法律条款页面
 
-编辑 `src/app/(marketing)/legal/legal-content.tsx`：
+编辑 `src/app/[locale]/(marketing)/legal/legal-content.tsx`：
 - 更新服务条款
 - 更新隐私政策
 
-## 第六步：部署（15 分钟）
+## 第六步：配置国际化（可选，10 分钟）
 
-### 6.1 部署到 Vercel
+### 6.1 i18n 模式
+
+模板支持三种国际化模式：
+
+| 模式 | 配置 | URL 结构 | 语言切换器 |
+|------|------|----------|-----------|
+| 单语言 | `NEXT_PUBLIC_I18N_ENABLED=false` | `/pricing` | 隐藏 |
+| 多语言（手动翻译） | `NEXT_PUBLIC_I18N_ENABLED=true` | `/en/pricing`, `/zh/pricing` | 显示 |
+| 多语言（自动翻译） | 同上 + Lingo.dev CLI | 同上 | 显示 |
+
+### 6.2 配置环境变量
+
+```env
+# 启用/禁用多语言支持
+NEXT_PUBLIC_I18N_ENABLED=true
+
+# 默认语言
+NEXT_PUBLIC_DEFAULT_LOCALE=en
+
+# 支持的语言（逗号分隔）
+NEXT_PUBLIC_SUPPORTED_LOCALES=en,zh
+```
+
+### 6.3 翻译文件
+
+翻译文件位于 `messages/` 目录：
+- `messages/en.json` - 英文翻译
+- `messages/zh.json` - 中文翻译
+
+直接编辑这些文件来自定义翻译。
+
+### 6.4 使用 Lingo.dev CLI 自动翻译（可选）
+
+1. 安装 CLI：
+   ```bash
+   pnpm add -D @lingo.dev/cli
+   ```
+
+2. 创建 `lingo.config.json`：
+   ```json
+   {
+     "version": 1,
+     "locale": { "source": "en", "targets": ["zh"] },
+     "buckets": {
+       "json": { "include": ["messages/[locale].json"] }
+     }
+   }
+   ```
+
+3. 运行翻译：
+   ```bash
+   LINGODOTDEV_API_KEY=your-api-key npx lingo translate
+   ```
+
+## 第七步：部署（15 分钟）
+
+### 方式一：部署到 Vercel（推荐）
 
 ```bash
 vercel
 ```
 
-### 6.2 配置生产环境
-
 在 Vercel 控制台设置环境变量：
 - `.env.example` 中的所有变量
 - `NEXT_PUBLIC_APP_URL` = 你的生产环境 URL
+- `LINGODOTDEV_API_KEY` = 你的 Lingo.dev API key（如需翻译）
 
-### 6.3 执行数据库迁移
+### 方式二：自托管部署
+
+#### 7.2.1 构建生产版本
+
+```bash
+# 安装依赖
+pnpm install
+
+# 构建（会自动生成翻译）
+pnpm build
+```
+
+#### 7.2.2 使用 Node.js 运行
+
+```bash
+# 启动生产服务器
+pnpm start
+```
+
+默认监听 3000 端口，可通过 `PORT` 环境变量修改：
+
+```bash
+PORT=8080 pnpm start
+```
+
+#### 7.2.3 使用 PM2 管理进程
+
+```bash
+# 安装 PM2
+npm install -g pm2
+
+# 启动应用
+pm2 start npm --name "my-saas" -- start
+
+# 查看状态
+pm2 status
+
+# 查看日志
+pm2 logs my-saas
+
+# 设置开机自启
+pm2 startup
+pm2 save
+```
+
+#### 7.2.4 使用 Docker 部署
+
+创建 `Dockerfile`：
+
+```dockerfile
+FROM node:20-alpine AS base
+
+# 安装 pnpm
+RUN npm install -g pnpm
+
+# 依赖阶段
+FROM base AS deps
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# 构建阶段
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN pnpm build
+
+# 运行阶段
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+构建并运行：
+
+```bash
+# 构建镜像
+docker build -t my-saas .
+
+# 运行容器
+docker run -p 3000:3000 --env-file .env my-saas
+```
+
+#### 7.2.5 Nginx 反向代理配置
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+### 7.3 执行数据库迁移
 
 在你的生产 Supabase 项目中执行所有迁移文件。
 
@@ -298,6 +464,7 @@ vercel
 - [ ] Mock 模式已禁用
 - [ ] 方案已自定义
 - [ ] 营销页面已更新
+- [ ] 国际化已配置（可选）
 - [ ] 已部署到生产环境
 - [ ] 生产环境变量已设置
 - [ ] 数据库迁移已执行
@@ -306,4 +473,4 @@ vercel
 
 - 在开发模式下查看 `/readme` 路由
 - 查阅 `docs/env-variables.md` 了解所有配置选项
-- 查阅 `supabase/README.md` 了解数据库文档
+- 查阅 `database/supabase/README.md` 了解数据库文档

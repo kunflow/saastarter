@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
@@ -12,23 +12,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
-
-    if (!supabase) {
+    if (!db.isConfigured()) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 503 }
       )
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const { data, error } = await db.auth.signIn(email, password)
 
-    if (error) {
+    if (error || !data) {
       return NextResponse.json(
-        { error: error.message },
+        { error: error?.message || 'Login failed' },
         { status: 401 }
       )
     }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
 import { getEmojiForText, aiConfig } from '@/lib/ai/config'
 import { creditsConfig } from '@/config/credits'
 
@@ -10,8 +10,7 @@ interface GenerateRequest {
   idempotencyKey?: string
 }
 
-// Mock quota storage for development without Supabase
-// Key: IP address, Value: { count: number, date: string (YYYY-MM-DD) }
+// Mock quota storage for development without database
 const mockQuotaStore = new Map<string, { count: number; date: string }>()
 
 function getMockQuota(ip: string): { allowed: boolean; usage_count: number; daily_limit: number; remaining: number } {
@@ -20,7 +19,6 @@ function getMockQuota(ip: string): { allowed: boolean; usage_count: number; dail
 
   const existing = mockQuotaStore.get(ip)
 
-  // Reset if new day
   if (!existing || existing.date !== today) {
     mockQuotaStore.set(ip, { count: 1, date: today })
     return {
@@ -31,7 +29,6 @@ function getMockQuota(ip: string): { allowed: boolean; usage_count: number; dail
     }
   }
 
-  // Check if quota exceeded
   if (existing.count >= dailyLimit) {
     return {
       allowed: false,
@@ -41,7 +38,6 @@ function getMockQuota(ip: string): { allowed: boolean; usage_count: number; dail
     }
   }
 
-  // Increment usage
   existing.count += 1
   mockQuotaStore.set(ip, existing)
 
@@ -72,12 +68,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    // Try to get current user
     let user = null
-
-    if (supabase) {
-      const { data } = await supabase.auth.getUser()
-      user = data.user
+    if (db.isConfigured()) {
+      const { data } = await db.auth.getUser()
+      user = data
     }
 
     // Handle anonymous users with IP-based quota
@@ -86,60 +81,54 @@ export async function POST(request: NextRequest) {
                  request.headers.get('x-real-ip') ||
                  '127.0.0.1'
 
-      const serviceClient = await createServiceClient()
+      // Try database quota check first
+      if (db.isConfigured()) {
+        const quotaResult = await db.checkAnonymousQuota(ip, 'ip')
 
-      // If no service client, use mock quota
-      if (!serviceClient) {
-        const mockQuota = getMockQuota(ip)
-        console.log('[AI Generate] Mock mode - IP:', ip, 'Quota:', mockQuota)
-
-        if (!mockQuota.allowed) {
+        if (quotaResult && !quotaResult.allowed) {
           return NextResponse.json(
             {
               error: 'Daily quota exceeded',
-              quota: mockQuota
+              quota: quotaResult
             },
             { status: 429 }
           )
         }
 
-        const emoji = await generateEmoji(text)
-        return createStreamingResponse(emoji, {
-          anonymous: true,
-          quota: mockQuota
-        })
+        if (quotaResult) {
+          const emoji = await generateEmoji(text)
+          return createStreamingResponse(emoji, {
+            anonymous: true,
+            quota: quotaResult
+          })
+        }
       }
 
-      const { data: quotaResult } = await serviceClient.rpc('check_anonymous_quota', {
-        p_identifier: ip,
-        p_identifier_type: 'ip'
-      })
+      // Fallback to mock quota
+      const mockQuota = getMockQuota(ip)
+      console.log('[AI Generate] Mock mode - IP:', ip, 'Quota:', mockQuota)
 
-      if (!quotaResult?.allowed) {
+      if (!mockQuota.allowed) {
         return NextResponse.json(
           {
             error: 'Daily quota exceeded',
-            quota: quotaResult
+            quota: mockQuota
           },
           { status: 429 }
         )
       }
 
-      // Generate emoji for anonymous user
       const emoji = await generateEmoji(text)
-
       return createStreamingResponse(emoji, {
         anonymous: true,
-        quota: quotaResult
+        quota: mockQuota
       })
     }
 
     // For authenticated users, check and deduct credits
-    const serviceClient = await createServiceClient()
-
-    if (!serviceClient) {
+    if (!db.isConfigured()) {
       // Fallback to mock mode
-      console.log('[AI Generate] No service client - running in mock mode, credits not deducted')
+      console.log('[AI Generate] No database - running in mock mode, credits not deducted')
       const emoji = await generateEmoji(text)
       return createStreamingResponse(emoji, {
         anonymous: false,
@@ -152,20 +141,20 @@ export async function POST(request: NextRequest) {
 
     // Deduct credits
     console.log('[AI Generate] Deducting credits for user:', user.id)
-    const { data: deductResult, error: deductError } = await serviceClient.rpc('deduct_credits', {
-      p_user_id: user.id,
-      p_amount: creditsConfig.creditPerGeneration,
-      p_idempotency_key: key,
-      p_description: `Text to emoji: ${text.slice(0, 50)}`,
-      p_metadata: { text, type: 'text_to_emoji' }
-    })
-    console.log('[AI Generate] Deduct result:', deductResult, 'Error:', deductError)
+    const deductResult = await db.deductCredits(
+      user.id,
+      creditsConfig.creditPerGeneration,
+      key,
+      `Text to emoji: ${text.slice(0, 50)}`,
+      { text, type: 'text_to_emoji' }
+    )
+    console.log('[AI Generate] Deduct result:', deductResult)
 
     if (!deductResult?.success) {
       return NextResponse.json(
         {
           error: deductResult?.error || 'Failed to deduct credits',
-          balance: deductResult?.balance
+          balance: deductResult?.balance_after
         },
         { status: 402 }
       )
@@ -192,15 +181,12 @@ export async function POST(request: NextRequest) {
 }
 
 async function generateEmoji(text: string): Promise<string> {
-  // In mock mode or without AI provider, use local mapping
   if (aiConfig.mockMode || aiConfig.provider === 'mock') {
-    // Simulate some processing time
     await new Promise(resolve => setTimeout(resolve, 500))
     return getEmojiForText(text)
   }
 
-  // TODO: Integrate with actual AI provider (OpenAI, Anthropic, etc.)
-  // For now, fallback to mock
+  // TODO: Integrate with actual AI provider
   return getEmojiForText(text)
 }
 
@@ -212,13 +198,11 @@ function createStreamingResponse(
 
   const stream = new ReadableStream({
     async start(controller) {
-      // Simulate streaming by sending character by character
       for (const char of emoji) {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'chunk', content: char })}\n\n`))
         await new Promise(resolve => setTimeout(resolve, 100))
       }
 
-      // Send completion with metadata
       controller.enqueue(encoder.encode(`data: ${JSON.stringify({
         type: 'done',
         content: emoji,

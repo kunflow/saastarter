@@ -1,18 +1,16 @@
-import { createClient } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
 import { NextResponse } from 'next/server'
 
 export async function POST() {
   try {
-    const supabase = await createClient()
-
-    if (!supabase) {
+    if (!db.isConfigured()) {
       return NextResponse.json({
         success: true,
         message: 'Logged out successfully',
       })
     }
 
-    const { error } = await supabase.auth.signOut()
+    const { error } = await db.auth.signOut()
 
     if (error) {
       return NextResponse.json(

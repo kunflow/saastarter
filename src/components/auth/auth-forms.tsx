@@ -1,16 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useTranslation } from '@/lib/i18n'
+import { useTranslations } from 'next-intl'
 import { useAuth } from './auth-provider'
 import { Button, Input, Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui'
+import { Link, useRouter } from '@/lib/i18n/navigation'
 
 export function LoginForm() {
-  const { t } = useTranslation()
   const { login } = useAuth()
   const router = useRouter()
+  const t = useTranslations('auth.login')
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -35,8 +34,8 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle>{t('auth.loginTitle')}</CardTitle>
-        <CardDescription>{t('auth.loginSubtitle')}</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('subtitle')}</CardDescription>
       </CardHeader>
 
       <form onSubmit={handleSubmit}>
@@ -49,28 +48,28 @@ export function LoginForm() {
 
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              {t('auth.email')}
+              {t('email')}
             </label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder={t('emailPlaceholder')}
               required
             />
           </div>
 
           <div className="space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
-              {t('auth.password')}
+              {t('password')}
             </label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder={t('passwordPlaceholder')}
               required
             />
           </div>
@@ -78,13 +77,13 @@ export function LoginForm() {
 
         <CardFooter className="flex flex-col gap-4">
           <Button type="submit" className="w-full" loading={loading}>
-            {t('auth.loginButton')}
+            {t('submit')}
           </Button>
 
           <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
-            {t('auth.noAccount')}{' '}
+            {t('noAccount')}{' '}
             <Link href="/signup" className="font-medium text-zinc-900 hover:underline dark:text-zinc-100">
-              {t('nav.signup')}
+              {t('signupLink')}
             </Link>
           </p>
         </CardFooter>
@@ -94,9 +93,9 @@ export function LoginForm() {
 }
 
 export function SignupForm() {
-  const { t } = useTranslation()
   const { signup } = useAuth()
   const router = useRouter()
+  const t = useTranslations('auth.signup')
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -128,9 +127,9 @@ export function SignupForm() {
       <Card className="w-full max-w-md">
         <CardContent className="py-8 text-center">
           <div className="mb-4 text-4xl">✅</div>
-          <h2 className="mb-2 text-lg font-semibold">{t('auth.signupSuccess')}</h2>
+          <h2 className="mb-2 text-lg font-semibold">{t('success.title')}</h2>
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            Redirecting to login...
+            {t('success.message')}
           </p>
         </CardContent>
       </Card>
@@ -140,8 +139,8 @@ export function SignupForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle>{t('auth.signupTitle')}</CardTitle>
-        <CardDescription>{t('auth.signupSubtitle')}</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('subtitle')}</CardDescription>
       </CardHeader>
 
       <form onSubmit={handleSubmit}>
@@ -154,41 +153,41 @@ export function SignupForm() {
 
           <div className="space-y-2">
             <label htmlFor="displayName" className="text-sm font-medium">
-              {t('auth.displayName')}
+              {t('displayName')}
             </label>
             <Input
               id="displayName"
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="Your name"
+              placeholder={t('displayNamePlaceholder')}
             />
           </div>
 
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              {t('auth.email')}
+              {t('email')}
             </label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder={t('emailPlaceholder')}
               required
             />
           </div>
 
           <div className="space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
-              {t('auth.password')}
+              {t('password')}
             </label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder={t('passwordPlaceholder')}
               minLength={6}
               required
             />
@@ -197,13 +196,13 @@ export function SignupForm() {
 
         <CardFooter className="flex flex-col gap-4">
           <Button type="submit" className="w-full" loading={loading}>
-            {t('auth.signupButton')}
+            {t('submit')}
           </Button>
 
           <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
-            {t('auth.hasAccount')}{' '}
+            {t('hasAccount')}{' '}
             <Link href="/login" className="font-medium text-zinc-900 hover:underline dark:text-zinc-100">
-              {t('nav.login')}
+              {t('loginLink')}
             </Link>
           </p>
         </CardFooter>

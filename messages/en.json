@@ -1,0 +1,164 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "result": "Result"
+  },
+  "nav": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "legal": "Legal",
+    "login": "Login",
+    "signup": "Sign Up",
+    "logout": "Logout",
+    "dashboard": "Dashboard"
+  },
+  "home": {
+    "title": "Transform Text to Emoji",
+    "description": "AI-powered text transformation at your fingertips",
+    "getStarted": "Get Started"
+  },
+  "demo": {
+    "title": "Text to Emoji",
+    "credits": "Credits: {balance}",
+    "anonymousQuota": "Anonymous quota available",
+    "placeholder": "Enter text to convert...",
+    "generate": "Generate",
+    "generating": "Generating...",
+    "signInForMore": "Sign in for more credits",
+    "quotaRemaining": "{remaining} / {limit} anonymous quota",
+    "creditsDeducted": "-{deducted} credits ({balance} remaining)"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "subtitle": "Choose the plan that works for you",
+    "free": {
+      "name": "Free",
+      "description": "Perfect for trying out",
+      "price": "$0",
+      "period": "/month",
+      "features": {
+        "credits": "100 credits on signup",
+        "rateLimit": "5 requests per minute",
+        "models": "Basic AI models",
+        "support": "Community support"
+      },
+      "cta": "Get Started"
+    },
+    "pro": {
+      "name": "Pro",
+      "description": "For power users",
+      "price": "$19",
+      "period": "/month",
+      "badge": "Most Popular",
+      "features": {
+        "credits": "1000 credits per month",
+        "rateLimit": "20 requests per minute",
+        "models": "Advanced AI models",
+        "support": "Priority support",
+        "api": "API access"
+      },
+      "cta": "Upgrade to Pro"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions",
+    "items": {
+      "whatIs": {
+        "question": "What is Next-AI SaaS?",
+        "answer": "Next-AI SaaS is a platform that provides AI-powered text transformation services. You can convert text into emojis and more."
+      },
+      "credits": {
+        "question": "How do credits work?",
+        "answer": "Each AI generation consumes 1 credit. Free users receive 100 credits on signup. Pro users receive 1000 credits monthly."
+      },
+      "upgrade": {
+        "question": "Can I upgrade my plan anytime?",
+        "answer": "Yes, you can upgrade from Free to Pro at any time. Your new benefits will be available immediately."
+      },
+      "privacy": {
+        "question": "How is my data protected?",
+        "answer": "We take data privacy seriously. Your data is encrypted in transit and at rest, and never shared with third parties."
+      },
+      "outOfCredits": {
+        "question": "What happens when I run out of credits?",
+        "answer": "When your credits reach zero, you will not be able to generate new content until you receive more credits or upgrade your plan."
+      }
+    }
+  },
+  "legal": {
+    "title": "Legal",
+    "terms": {
+      "title": "Terms of Service",
+      "intro": "By accessing and using this service, you agree to be bound by these Terms of Service.",
+      "acceptableUse": {
+        "title": "1. Acceptable Use",
+        "content": "You agree to use this service only for lawful purposes and in accordance with these terms."
+      },
+      "accountResponsibility": {
+        "title": "2. Account Responsibility",
+        "content": "You are responsible for maintaining the confidentiality of your account credentials."
+      },
+      "serviceAvailability": {
+        "title": "3. Service Availability",
+        "content": "We strive to provide uninterrupted service but do not guarantee 100% uptime."
+      },
+      "modifications": {
+        "title": "4. Modifications",
+        "content": "We reserve the right to modify these terms at any time."
+      }
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "This Privacy Policy describes how we collect, use, and protect your personal information.",
+      "collection": {
+        "title": "1. Information We Collect",
+        "content": "We collect information you provide directly, such as email address and usage data."
+      },
+      "usage": {
+        "title": "2. How We Use Your Information",
+        "content": "We use your information to provide and improve our services, and to communicate with you."
+      },
+      "security": {
+        "title": "3. Data Security",
+        "content": "We implement appropriate security measures to protect your personal information."
+      },
+      "retention": {
+        "title": "4. Data Retention",
+        "content": "We retain your data only as long as necessary to provide our services."
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your account",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Sign In",
+      "noAccount": "Don't have an account?",
+      "signupLink": "Sign Up"
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Get started with your free account",
+      "displayName": "Display Name",
+      "displayNamePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Sign In",
+      "success": {
+        "title": "Account Created!",
+        "message": "Redirecting to login..."
+      }
+    }
+  }
+}

@@ -62,14 +62,14 @@ NEXT_PUBLIC_SEO_KEYWORDS=your,keywords,here
 
 Run migrations in Supabase SQL Editor (in order):
 
-1. `supabase/migrations/20260204100001_create_enums.sql`
-2. `supabase/migrations/20260204100002_create_config_tables.sql`
-3. `supabase/migrations/20260204100003_create_user_tables.sql`
-4. `supabase/migrations/20260204100004_create_ledger_tables.sql`
-5. `supabase/migrations/20260204100005_create_triggers.sql`
-6. `supabase/migrations/20260204100006_create_functions.sql`
-7. `supabase/migrations/20260204100007_create_rls_policies.sql`
-8. `supabase/migrations/20260204100008_seed_initial_data.sql`
+1. `database/supabase/migrations/20260204100001_create_enums.sql`
+2. `database/supabase/migrations/20260204100002_create_config_tables.sql`
+3. `database/supabase/migrations/20260204100003_create_user_tables.sql`
+4. `database/supabase/migrations/20260204100004_create_ledger_tables.sql`
+5. `database/supabase/migrations/20260204100005_create_triggers.sql`
+6. `database/supabase/migrations/20260204100006_create_functions.sql`
+7. `database/supabase/migrations/20260204100007_create_rls_policies.sql`
+8. `database/supabase/migrations/20260204100008_seed_initial_data.sql`
 
 ### Step 4: Run Development Server
 
@@ -129,11 +129,12 @@ For advanced customization, edit the config files in `src/config/`:
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── (auth)/            # Login, Signup pages
-│   ├── (marketing)/       # Pricing, FAQ, Legal
-│   ├── api/               # API routes
-│   ├── dashboard/         # User dashboard
-│   └── readme/            # Developer guide (hidden)
+│   ├── [locale]/          # Locale-based routing (en, zh)
+│   │   ├── (auth)/        # Login, Signup pages
+│   │   ├── (marketing)/   # Pricing, FAQ, Legal
+│   │   ├── dashboard/     # User dashboard
+│   │   └── readme/        # Developer guide (hidden)
+│   └── api/               # API routes
 ├── components/            # React components
 ├── config/                # Configuration files
 │   ├── site.ts           # Site configuration
@@ -141,9 +142,37 @@ src/
 │   ├── env.ts            # Environment variables
 │   ├── credits.ts        # Credits configuration
 │   └── plans.ts          # Plans configuration
-├── lib/                   # Utilities
-└── locales/               # i18n translations
+└── lib/                   # Utilities
+    ├── supabase/         # Supabase clients
+    ├── ai/               # AI Gateway
+    └── i18n/             # i18n configuration
+
+messages/                  # Translation files
+├── en.json               # English translations
+└── zh.json               # Chinese translations
 ```
+
+## i18n (Internationalization)
+
+The app supports English (en) and Chinese (zh) with URL-based routing:
+- `/` or `/en/*` - English pages (default)
+- `/zh/*` - Chinese pages
+
+**i18n Modes:**
+
+| Mode | Configuration | URL Structure |
+|------|---------------|---------------|
+| Single Language | `NEXT_PUBLIC_I18N_ENABLED=false` | `/pricing` |
+| Multi-language | `NEXT_PUBLIC_I18N_ENABLED=true` | `/en/pricing`, `/zh/pricing` |
+
+**Translation Files:**
+- Location: `messages/en.json`, `messages/zh.json`
+- Format: Semantic keys (e.g., `home.title`, `nav.pricing`)
+
+**Auto Translation (Optional):**
+1. Install: `pnpm add -D @lingo.dev/cli`
+2. Configure `lingo.config.json`
+3. Run: `LINGODOTDEV_API_KEY=xxx npx lingo translate`
 
 ## Next Steps
 
