@@ -1,5 +1,9 @@
 # Next-AI SaaS Starter
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/kunflow/saastarter)](https://github.com/kunflow/saastarter/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/kunflow/saastarter)](https://github.com/kunflow/saastarter/network/members)
+
 面向独立开发者和小团队的生产级 AI SaaS 模板。让你的 AI SaaS 产品在数小时内上线，而不是数周。
 
 [English](./README.md)
@@ -26,7 +30,7 @@
 ### 第一步：克隆并安装
 
 ```bash
-git clone <your-repo-url> my-saas
+git clone https://github.com/kunflow/saastarter.git my-saas
 cd my-saas
 pnpm install
 ```
@@ -192,8 +196,18 @@ messages/                  # 翻译文件
 ## 支持
 
 - 文档：开发模式下访问 `/readme` 路由
-- 问题：提交 GitHub Issue
+- 问题：[提交 GitHub Issue](https://github.com/kunflow/saastarter/issues)
 
-## 许可
+## 贡献
 
-详见 [LICENSING.md](./docs/LICENSING.md)。
+欢迎贡献代码！请随时提交 Pull Request。
+
+1. Fork 本仓库
+2. 创建你的功能分支 (`git checkout -b feature/amazing-feature`)
+3. 提交你的更改 (`git commit -m 'Add some amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 打开一个 Pull Request
+
+## 许可证
+
+本项目采用 MIT 许可证 - 详见 [LICENSE](./LICENSE) 文件。

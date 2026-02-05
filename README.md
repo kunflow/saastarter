@@ -1,5 +1,9 @@
 # Next-AI SaaS Starter
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/kunflow/saastarter)](https://github.com/kunflow/saastarter/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/kunflow/saastarter)](https://github.com/kunflow/saastarter/network/members)
+
 A production-ready AI-first SaaS boilerplate for indie developers and small teams. Get your AI SaaS product live in hours, not weeks.
 
 [中文文档](./README-zh.md)
@@ -26,7 +30,7 @@ A production-ready AI-first SaaS boilerplate for indie developers and small team
 ### Step 1: Clone and Install
 
 ```bash
-git clone <your-repo-url> my-saas
+git clone https://github.com/kunflow/saastarter.git my-saas
 cd my-saas
 pnpm install
 ```
@@ -192,8 +196,18 @@ The app supports English (en) and Chinese (zh) with URL-based routing:
 ## Support
 
 - Documentation: Check `/readme` route in development mode
-- Issues: Open a GitHub issue
+- Issues: [Open a GitHub issue](https://github.com/kunflow/saastarter/issues)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-See [LICENSING.md](./docs/LICENSING.md) for details.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
