@@ -4,9 +4,28 @@
 [![GitHub stars](https://img.shields.io/github/stars/kunflow/saastarter)](https://github.com/kunflow/saastarter/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/kunflow/saastarter)](https://github.com/kunflow/saastarter/network/members)
 
+> **⚠️ Open Source Edition**
+>
+> This is the **Open Source Base Version** of Next-AI SaaS Starter. It provides the complete architecture and UI framework for learning and as a starting point for secondary development. For production use with real AI capabilities, please consider the Pro version.
+
 A production-ready AI-first SaaS boilerplate for indie developers and small teams. Get your AI SaaS product live in hours, not weeks.
 
 [中文文档](./README-zh.md)
+
+## Open Source vs Pro Comparison
+
+| Feature | Open Source | Pro |
+|---------|-------------|-----|
+| Next.js App Router Architecture | ✅ | ✅ |
+| Supabase Auth Integration | ✅ | ✅ |
+| Database Schema (PostgreSQL/MySQL) | ✅ | ✅ |
+| UI Component Library | ✅ | ✅ |
+| i18n Multi-language System | ✅ | ✅ |
+| SEO (Sitemap, Robots, Metadata) | ✅ | ✅ |
+| Real AI Provider Integration | ❌ Demo Mode | ✅ OpenAI/Anthropic |
+| Credits System (Deduction) | ❌ Bypassed | ✅ Full Implementation |
+| Payment Integration | ❌ Not Included | ✅ Stripe/LemonSqueezy |
+| Production Support | Community | Priority |
 
 ## What You Get
 

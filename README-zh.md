@@ -4,9 +4,28 @@
 [![GitHub stars](https://img.shields.io/github/stars/kunflow/saastarter)](https://github.com/kunflow/saastarter/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/kunflow/saastarter)](https://github.com/kunflow/saastarter/network/members)
 
+> **⚠️ 开源版本**
+>
+> 这是 Next-AI SaaS Starter 的**开源基础版**。它提供了完整的架构和 UI 框架，适合学习和作为二次开发的起点。如需用于生产环境并使用真实 AI 能力，请考虑 Pro 版本。
+
 面向独立开发者和小团队的生产级 AI SaaS 模板。让你的 AI SaaS 产品在数小时内上线，而不是数周。
 
 [English](./README.md)
+
+## 开源版 vs Pro 版对比
+
+| 功能 | 开源版 | Pro 版 |
+|------|--------|--------|
+| Next.js App Router 架构 | ✅ | ✅ |
+| Supabase Auth 认证集成 | ✅ | ✅ |
+| 数据库 Schema (PostgreSQL/MySQL) | ✅ | ✅ |
+| UI 组件库 | ✅ | ✅ |
+| i18n 多语言系统 | ✅ | ✅ |
+| SEO (Sitemap, Robots, 元数据) | ✅ | ✅ |
+| 真实 AI 提供商集成 | ❌ 演示模式 | ✅ OpenAI/Anthropic |
+| Credits 积分系统（扣除） | ❌ 已旁路 | ✅ 完整实现 |
+| 支付集成 | ❌ 未包含 | ✅ Stripe/LemonSqueezy |
+| 生产支持 | 社区 | 优先支持 |
 
 ## 你将获得
 
