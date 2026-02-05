@@ -1,22 +1,18 @@
 /**
- * Database Abstraction Layer
- * Unified entry point for database operations
+ * Database Abstraction Layer - Open Source Version
  *
- * Usage:
- *   import { db } from '@/lib/db'
+ * This is the open source version of the database layer.
+ * Credits and quota operations return mock data.
+ * Auth operations work normally with configured database.
  *
- *   // Auth operations
- *   const { data: user } = await db.auth.getUser()
- *
- *   // Database operations
- *   const status = await db.getUserStatus(userId)
+ * For full database functionality, please upgrade to the Pro version.
  */
 
 import { env } from '@/config/env'
 import { SupabaseAdapter } from './adapters/supabase'
 import { PostgreSQLAdapter } from './adapters/postgresql'
 import { MySQLAdapter } from './adapters/mysql'
-import type { DatabaseAdapter, DatabaseType } from './types'
+import type { DatabaseAdapter, DatabaseType, UserStatus, QuotaResult, DeductResult } from './types'
 
 // Export types
 export * from './types'
@@ -49,54 +45,119 @@ export function getAdapter(): DatabaseAdapter {
 }
 
 /**
+ * Open Source Version: Mock user status
+ * Returns demo data without database query
+ */
+function getMockUserStatus(): UserStatus {
+  return {
+    user: {
+      id: 'demo-user',
+      email: 'demo@example.com',
+      display_name: 'Demo User',
+      avatar_url: null,
+      locale: 'en',
+      timezone: 'UTC'
+    },
+    plan: {
+      slug: 'free',
+      name: 'Free',
+      status: 'active'
+    },
+    credits: {
+      balance: 999999, // Unlimited for open source
+      total_earned: 999999,
+      total_spent: 0
+    },
+    entitlements: {
+      monthly_credits: 999999,
+      rate_limit_per_minute: 999,
+      rate_limit_per_hour: 9999,
+      concurrent_requests: 10,
+      max_input_length: 10000,
+      max_output_length: 20000,
+      api_access: true,
+      priority_queue: false,
+      advanced_models: false
+    }
+  }
+}
+
+/**
+ * Open Source Version: Mock anonymous quota
+ * Always allows requests
+ */
+function getMockAnonymousQuota(): QuotaResult {
+  return {
+    allowed: true,
+    usage_count: 0,
+    daily_limit: 999999,
+    remaining: 999999
+  }
+}
+
+/**
+ * Open Source Version: Mock credits deduction
+ * Always returns success without actual deduction
+ */
+function getMockDeductCredits(): DeductResult {
+  return {
+    success: true,
+    balance_after: 999999,
+    idempotent: false
+  }
+}
+
+/**
  * Database client - use this for all database operations
  *
- * @example
- * ```typescript
- * import { db } from '@/lib/db'
- *
- * // Get current user
- * const { data: user, error } = await db.auth.getUser()
- *
- * // Get user status
- * const status = await db.getUserStatus(userId)
- *
- * // Check anonymous quota
- * const quota = await db.checkAnonymousQuota(ip, 'ip')
- *
- * // Deduct credits
- * const result = await db.deductCredits(userId, 1, key, 'description', {})
- * ```
+ * Open Source Version:
+ * - Auth operations work normally
+ * - Credits/quota operations return mock data
  */
 export const db = {
   /**
-   * Authentication methods
+   * Authentication methods (works normally)
    */
   get auth() {
     return getAdapter().auth
   },
 
   /**
-   * Get user status including plan, credits, and entitlements
+   * Get user status - Open Source: Returns mock data
    */
-  getUserStatus: (userId: string) => getAdapter().getUserStatus(userId),
+  getUserStatus: async (_userId: string): Promise<UserStatus | null> => {
+    // Open Source Version: Return mock status
+    // Auth still works, but credits are unlimited
+    console.log('[DB] Open Source Version: Returning mock user status')
+    return getMockUserStatus()
+  },
 
   /**
-   * Check anonymous user quota
+   * Check anonymous quota - Open Source: Always allows
    */
-  checkAnonymousQuota: (identifier: string, identifierType: 'ip' | 'fingerprint') =>
-    getAdapter().checkAnonymousQuota(identifier, identifierType),
+  checkAnonymousQuota: async (
+    _identifier: string,
+    _identifierType: 'ip' | 'fingerprint'
+  ): Promise<QuotaResult | null> => {
+    // Open Source Version: Always allow requests
+    console.log('[DB] Open Source Version: Returning mock quota (unlimited)')
+    return getMockAnonymousQuota()
+  },
 
   /**
-   * Deduct credits from user balance
+   * Deduct credits - Open Source: Mock success, no actual deduction
    */
-  deductCredits: (
-    userId: string,
-    amount: number,
-    idempotencyKey: string,
-    description: string,
-    metadata: Record<string, unknown>
-  ) => getAdapter().deductCredits(userId, amount, idempotencyKey, description, metadata),
+  deductCredits: async (
+    _userId: string,
+    _amount: number,
+    _idempotencyKey: string,
+    _description: string,
+    _metadata: Record<string, unknown>
+  ): Promise<DeductResult | null> => {
+    // Open Source Version: Return success without deduction
+    console.log('[DB] Open Source Version: Mock credits deduction (no actual deduction)')
+    return getMockDeductCredits()
+  },
 
   /**
    * Check if database is configured
