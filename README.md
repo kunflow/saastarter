@@ -1,7 +1,5 @@
 <div align="center">
   
-<!-- SCREENSHOT: hero banner -->
-
 # 🚀 Next-AI SaaS Starter
 
 ### Ship your AI SaaS in hours, not weeks.
@@ -18,7 +16,6 @@ Next.js 16 · Supabase · Tailwind CSS · TypeScript
 
 [**Live Demo**](https://saastarter.profilelift.pro) · [**Get Pro Version**](https://kunflow.gumroad.com/l/saastarter-pro) · [**Documentation**](./docs/) · [中文文档](./README-zh.md)
 
-<!-- SCREENSHOT: demo gif or hero screenshot -->
 
 </div>
 
@@ -30,7 +27,12 @@ Stop building auth, billing, and AI plumbing from scratch. **Next-AI SaaS Starte
 
 > **💡 Used by indie hackers and small teams to launch AI products faster.**
 
-<!-- SCREENSHOT: product overview -->
+
+<div align="center">
+  <img src="./docs/screenshots/hero.png" alt="Next-AI SaaS Starter - Homepage" width="800" />
+  <br/><br/>
+  <img src="./docs/screenshots/pricing.png" alt="Next-AI SaaS Starter - Pricing" width="800" />
+</div>
 
 ---
 
