@@ -27,6 +27,19 @@ Stop building auth, billing, and AI plumbing from scratch. **Next-AI SaaS Starte
 
 > **💡 Used by indie hackers and small teams to launch AI products faster.**
 
+### 📊 How We Compare
+
+| Feature | Next-AI SaaS Starter | ShipFast ($199) | Makerkit ($249) |
+|---------|---------------------|-----------------|-----------------|
+| Price (Open Source) | **Free (MIT)** | $199 | $249 |
+| Price (Pro) | **$49.50** | $199 | $249 |
+| AI Gateway (Multi-provider) | ✅ | ❌ | ❌ |
+| Credits System | ✅ Financial-grade | ❌ | Basic |
+| Next.js Version | 16 (Latest) | 14 | 15 |
+| Database | Supabase | Supabase | Supabase/Firebase |
+| Stripe Billing | ✅ In-site management | ✅ Portal redirect | ✅ Portal redirect |
+| i18n | ✅ Built-in | ❌ | ✅ |
+
 
 <div align="center">
   <img src="./docs/screenshots/hero.png" alt="Next-AI SaaS Starter - Homepage" width="800" />
