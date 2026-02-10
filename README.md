@@ -14,7 +14,7 @@ Next.js 16 · Supabase · Tailwind CSS · TypeScript
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![GitHub stars](https://img.shields.io/github/stars/kunflow/saastarter?style=social)](https://github.com/kunflow/saastarter/stargazers)
 
-[**Live Demo**](https://saastarter.profilelift.pro) · [**Get Pro Version**](https://kunflow.gumroad.com/l/saastarter-pro?code=LAUNCH20) · [**Documentation**](./docs/) · [中文文档](./README-zh.md)
+[**Live Demo**](https://saastarter.profilelift.pro) · [**Get Pro Version**](https://kunflow.gumroad.com/l/saastarter-pro/LAUNCH20) · [**Documentation**](./docs/) · [中文文档](./README-zh.md)
 
 
 </div>
@@ -73,7 +73,7 @@ Stop building auth, billing, and AI plumbing from scratch. **Next-AI SaaS Starte
 
 **Want the full production experience?**
 
-[🛒 **Get Pro Version →**](https://kunflow.gumroad.com/l/saastarter-pro?code=LAUNCH20)
+[🛒 **Get Pro Version →**](https://kunflow.gumroad.com/l/saastarter-pro/LAUNCH20)
 
 🎉 **Launch Special: 50% OFF** with code `LAUNCH20`
 
@@ -244,7 +244,7 @@ It helps others discover it and motivates us to keep improving.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=kunflow/saastarter&type=Date)](https://star-history.com/#kunflow/saastarter&Date)
 
-**[⭐ Star on GitHub](https://github.com/kunflow/saastarter)** &nbsp;·&nbsp; **[🛒 Get Pro Version](https://kunflow.gumroad.com/l/saastarter-pro?code=LAUNCH20)** &nbsp;·&nbsp; **[🌐 Live Demo](https://saastarter.profilelift.pro)**
+**[⭐ Star on GitHub](https://github.com/kunflow/saastarter)** &nbsp;·&nbsp; **[🛒 Get Pro Version](https://kunflow.gumroad.com/l/saastarter-pro/LAUNCH20)** &nbsp;·&nbsp; **[🌐 Live Demo](https://saastarter.profilelift.pro)**
 
 ---
 
