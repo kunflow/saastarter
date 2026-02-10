@@ -1,52 +1,89 @@
-# Next-AI SaaS Starter
+<div align="center">
+  
+<!-- SCREENSHOT: hero banner -->
+
+# 🚀 Next-AI SaaS Starter
+
+### Ship your AI SaaS in hours, not weeks.
+
+The **AI-first** SaaS boilerplate built for indie developers and small teams.  
+Next.js 16 · Supabase · Tailwind CSS · TypeScript
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub stars](https://img.shields.io/github/stars/kunflow/saastarter)](https://github.com/kunflow/saastarter/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/kunflow/saastarter)](https://github.com/kunflow/saastarter/network/members)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-Auth%20%2B%20DB-3FCF8E?logo=supabase)](https://supabase.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.x-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![GitHub stars](https://img.shields.io/github/stars/kunflow/saastarter?style=social)](https://github.com/kunflow/saastarter/stargazers)
 
-> **⚠️ Open Source Edition**
->
-> This is the **Open Source Base Version** of Next-AI SaaS Starter. It provides the complete architecture and UI framework for learning and as a starting point for secondary development. For production use with real AI capabilities, please consider the Pro version.
+[**Live Demo**](https://saastarter.profilelift.pro) · [**Get Pro Version**](https://kunflow.gumroad.com/l/saastarter-pro) · [**Documentation**](./docs/) · [中文文档](./README-zh.md)
 
-A production-ready AI-first SaaS boilerplate for indie developers and small teams. Get your AI SaaS product live in hours, not weeks.
+<!-- SCREENSHOT: demo gif or hero screenshot -->
 
-[中文文档](./README-zh.md)
+</div>
 
-## Open Source vs Pro Comparison
+---
+
+## ⭐ Why Next-AI SaaS Starter?
+
+Stop building auth, billing, and AI plumbing from scratch. **Next-AI SaaS Starter** gives you a production-grade foundation so you can focus on what makes your product unique.
+
+> **💡 Used by indie hackers and small teams to launch AI products faster.**
+
+<!-- SCREENSHOT: product overview -->
+
+---
+
+## ✨ Features
+
+| | Feature | Description |
+|---|---|---|
+| 🤖 | **AI Streaming** | Real-time streaming output with Server-Sent Events |
+| 💰 | **Credits System** | Usage tracking, balance management, and transaction ledger |
+| 🔐 | **Auth Ready** | Login, signup, session management via Supabase Auth |
+| 💳 | **Billing Structure** | Free/Pro plans with entitlement mapping |
+| 🛡️ | **Abuse Protection** | Rate limiting, anonymous quotas, cost guardrails |
+| 🌍 | **i18n Support** | English & Chinese out of the box, easily extensible |
+| 🔍 | **SEO Optimized** | Dynamic sitemap, robots.txt, OpenGraph metadata |
+| 🎨 | **Zero-Code Branding** | Configure everything via environment variables |
+| 📱 | **Responsive UI** | Beautiful, mobile-first design with Tailwind CSS |
+| ⚡ | **Next.js 16** | Latest App Router with React 19 and Turbopack |
+
+---
+
+## 🆓 Open Source vs 💎 Pro
 
 | Feature | Open Source | Pro |
-|---------|-------------|-----|
-| Next.js App Router Architecture | ✅ | ✅ |
+|:--------|:----------:|:---:|
+| Next.js 16 App Router Architecture | ✅ | ✅ |
 | Supabase Auth Integration | ✅ | ✅ |
-| Database Schema (PostgreSQL/MySQL) | ✅ | ✅ |
+| Database Schema & Migrations | ✅ | ✅ |
 | UI Component Library | ✅ | ✅ |
 | i18n Multi-language System | ✅ | ✅ |
 | SEO (Sitemap, Robots, Metadata) | ✅ | ✅ |
-| Real AI Provider Integration | ❌ Demo Mode | ✅ OpenAI/Anthropic |
-| Credits System (Deduction) | ❌ Bypassed | ✅ Full Implementation |
-| Payment Integration | ❌ Not Included | ✅ Stripe/LemonSqueezy |
-| Production Support | Community | Priority |
+| Real AI Provider Integration | 🔸 Demo Mode | ✅ OpenAI / Anthropic |
+| Credits System (Full Deduction) | 🔸 Bypassed | ✅ Full Implementation |
+| Payment Integration | ❌ | ✅ Stripe / LemonSqueezy |
+| AI Gateway (Multi-provider) | ❌ | ✅ Built-in |
+| Production Support | Community | ⚡ Priority |
 
-## What You Get
+<div align="center">
 
-- **AI Streaming** - Real-time streaming output with Server-Sent Events
-- **Credits System** - Usage tracking, balance management, and ledger
-- **Auth Ready** - Login, signup, session management with Supabase Auth
-- **Billing Structure** - Free/Pro plans with entitlement mapping
-- **Abuse Protection** - Rate limiting, anonymous quotas, cost guardrails
-- **i18n Support** - English and Chinese out of the box
-- **SEO Ready** - Dynamic sitemap, robots.txt, and metadata
-- **Zero-Code Branding** - Configure everything via environment variables
+**Want the full production experience?**
 
-## Quick Start (10 Minutes)
+[🛒 **Get Pro Version →**](https://kunflow.gumroad.com/l/saastarter-pro)
+
+</div>
+
+---
+
+## 🚀 Quick Start (10 Minutes)
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm 9+
-- Supabase account (free tier works)
+- **Node.js** 18+ &nbsp;·&nbsp; **pnpm** 9+ &nbsp;·&nbsp; **Supabase** account ([free tier](https://supabase.com/) works)
 
-### Step 1: Clone and Install
+### 1️⃣ Clone & Install
 
 ```bash
 git clone https://github.com/kunflow/saastarter.git my-saas
@@ -54,7 +91,7 @@ cd my-saas
 pnpm install
 ```
 
-### Step 2: Configure Environment
+### 2️⃣ Configure Environment
 
 ```bash
 cp .env.example .env
@@ -63,91 +100,52 @@ cp .env.example .env
 Edit `.env` with your settings:
 
 ```env
-# Supabase (Optional - leave as-is for mock mode)
+# Supabase (leave as-is for demo mode)
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
-# Branding (Customize these!)
+# Branding — make it yours!
 NEXT_PUBLIC_APP_NAME=Your Product Name
 NEXT_PUBLIC_APP_LOGO=🚀
 NEXT_PUBLIC_APP_TAGLINE=Your catchy tagline
-NEXT_PUBLIC_COMPANY_NAME=Your Company
-NEXT_PUBLIC_CONTACT_EMAIL=support@your-domain.com
-
-# SEO
-NEXT_PUBLIC_SEO_TITLE=Your Product Title
-NEXT_PUBLIC_SEO_DESCRIPTION=Your product description
-NEXT_PUBLIC_SEO_KEYWORDS=your,keywords,here
 ```
 
-### Step 3: Setup Database
+### 3️⃣ Setup Database
 
-Run migrations in Supabase SQL Editor (in order):
+Run the migration files in order in the Supabase SQL Editor:
 
-1. `database/supabase/migrations/20260204100001_create_enums.sql`
-2. `database/supabase/migrations/20260204100002_create_config_tables.sql`
-3. `database/supabase/migrations/20260204100003_create_user_tables.sql`
-4. `database/supabase/migrations/20260204100004_create_ledger_tables.sql`
-5. `database/supabase/migrations/20260204100005_create_triggers.sql`
-6. `database/supabase/migrations/20260204100006_create_functions.sql`
-7. `database/supabase/migrations/20260204100007_create_rls_policies.sql`
-8. `database/supabase/migrations/20260204100008_seed_initial_data.sql`
+```
+database/supabase/migrations/
+├── 20260204100001_create_enums.sql
+├── 20260204100002_create_config_tables.sql
+├── 20260204100003_create_user_tables.sql
+├── 20260204100004_create_ledger_tables.sql
+├── 20260204100005_create_triggers.sql
+├── 20260204100006_create_functions.sql
+├── 20260204100007_create_rls_policies.sql
+└── 20260204100008_seed_initial_data.sql
+```
 
-### Step 4: Run Development Server
+### 4️⃣ Launch
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) - you should see the demo page.
+Open [http://localhost:3000](http://localhost:3000) — your AI SaaS is running! 🎉
 
-### Step 5: Test the Golden Path
+### 5️⃣ Test the Golden Path
 
-1. Click "Sign Up" and create an account
-2. Return to Home and try the Text-to-Emoji demo
-3. Watch the streaming output
-4. Check your credits balance decreased
-5. Visit Dashboard to see your status
+1. **Sign Up** → Create an account
+2. **Try the Demo** → Use the Text-to-Emoji AI feature
+3. **Watch Streaming** → See real-time AI output
+4. **Check Credits** → Balance decreases after usage
+5. **Dashboard** → View your account status
 
-**Congratulations!** Your AI SaaS is running.
+---
 
-## Configuration
-
-### Environment Variables
-
-All branding and settings can be configured via `.env`:
-
-| Category | Variable | Description |
-|----------|----------|-------------|
-| **App** | `NEXT_PUBLIC_APP_URL` | Application URL |
-| | `NEXT_PUBLIC_APP_NAME` | Brand name |
-| | `NEXT_PUBLIC_APP_LOGO` | Logo (emoji or path) |
-| | `NEXT_PUBLIC_APP_TAGLINE` | Brand tagline |
-| **Brand** | `NEXT_PUBLIC_COMPANY_NAME` | Legal company name |
-| | `NEXT_PUBLIC_CONTACT_EMAIL` | Support email |
-| | `NEXT_PUBLIC_CONTACT_TWITTER` | Twitter handle |
-| | `NEXT_PUBLIC_CONTACT_GITHUB` | GitHub URL |
-| **SEO** | `NEXT_PUBLIC_SEO_TITLE` | Default page title |
-| | `NEXT_PUBLIC_SEO_DESCRIPTION` | Meta description |
-| | `NEXT_PUBLIC_SEO_KEYWORDS` | Keywords (comma-separated) |
-| | `NEXT_PUBLIC_TWITTER_SITE` | Twitter site handle |
-
-See [docs/env-variables.md](./docs/env-variables.md) for the complete list.
-
-### Configuration Files
-
-For advanced customization, edit the config files in `src/config/`:
-
-| File | Purpose |
-|------|---------|
-| `site.ts` | Brand, contact, legal, feature toggles |
-| `seo.ts` | SEO, OpenGraph, Twitter, page metadata |
-| `env.ts` | Environment variables (Supabase, AI, App settings) |
-| `credits.ts` | Default credits, deduction rules |
-| `plans.ts` | Free/Pro plan definitions |
-
-## Project Structure
+## 🏗️ Project Structure
 
 ```
 src/
@@ -155,78 +153,97 @@ src/
 │   ├── [locale]/          # Locale-based routing (en, zh)
 │   │   ├── (auth)/        # Login, Signup pages
 │   │   ├── (marketing)/   # Pricing, FAQ, Legal
-│   │   ├── dashboard/     # User dashboard
-│   │   └── readme/        # Developer guide (hidden)
+│   │   └── dashboard/     # User dashboard
 │   └── api/               # API routes
 ├── components/            # React components
 ├── config/                # Configuration files
-│   ├── site.ts           # Site configuration
-│   ├── seo.ts            # SEO configuration
-│   ├── env.ts            # Environment variables
-│   ├── credits.ts        # Credits configuration
-│   └── plans.ts          # Plans configuration
+│   ├── site.ts           # Site & brand config
+│   ├── seo.ts            # SEO & metadata
+│   ├── credits.ts        # Credits & usage rules
+│   └── plans.ts          # Subscription plans
 └── lib/                   # Utilities
     ├── supabase/         # Supabase clients
     ├── ai/               # AI Gateway
-    └── i18n/             # i18n configuration
+    └── i18n/             # Internationalization
 
-messages/                  # Translation files
-├── en.json               # English translations
-└── zh.json               # Chinese translations
+messages/                  # Translation files (en.json, zh.json)
+database/                  # SQL migrations & schema
+docs/                      # Documentation
 ```
 
-## i18n (Internationalization)
+---
 
-The app supports English (en) and Chinese (zh) with URL-based routing:
-- `/` or `/en/*` - English pages (default)
-- `/zh/*` - Chinese pages
+## 🌐 Internationalization (i18n)
 
-**i18n Modes:**
-
-| Mode | Configuration | URL Structure |
-|------|---------------|---------------|
+| Mode | Config | URL Pattern |
+|------|--------|-------------|
 | Single Language | `NEXT_PUBLIC_I18N_ENABLED=false` | `/pricing` |
 | Multi-language | `NEXT_PUBLIC_I18N_ENABLED=true` | `/en/pricing`, `/zh/pricing` |
 
-**Translation Files:**
-- Location: `messages/en.json`, `messages/zh.json`
-- Format: Semantic keys (e.g., `home.title`, `nav.pricing`)
+Add new languages by creating translation files in `messages/` and updating the i18n config.
 
-**Auto Translation (Optional):**
-1. Install: `pnpm add -D @lingo.dev/cli`
-2. Configure `lingo.config.json`
-3. Run: `LINGODOTDEV_API_KEY=xxx npx lingo translate`
+---
 
-## Next Steps
+## 🛠️ Tech Stack
 
-- [Make It Yours](./docs/MAKE-IT-YOURS.md) - Customize for your product (2 hours)
-- [Environment Variables](./docs/env-variables.md) - Complete configuration reference
-- [Operating Guide](./docs/OPERATING-GUIDE.md) - Production best practices
-- [Licensing](./docs/LICENSING.md) - License terms
+| Category | Technology |
+|----------|-----------|
+| **Framework** | [Next.js 16](https://nextjs.org/) (App Router + Turbopack) |
+| **Auth & Database** | [Supabase](https://supabase.com/) (PostgreSQL + Auth + RLS) |
+| **Styling** | [Tailwind CSS 4](https://tailwindcss.com/) |
+| **Language** | [TypeScript 5](https://www.typescriptlang.org/) |
+| **i18n** | [next-intl](https://next-intl-docs.vercel.app/) |
+| **Validation** | [Zod 4](https://zod.dev/) |
+| **Deployment** | [Vercel](https://vercel.com/) (recommended) |
 
-## Tech Stack
+---
 
-- **Framework**: Next.js 16.x (App Router)
-- **Database**: Supabase (PostgreSQL + Auth)
-- **Styling**: Tailwind CSS 4.x
-- **Language**: TypeScript 5.x
-- **Deployment**: Vercel
+## 📖 Documentation
 
-## Support
+| Guide | Description |
+|-------|-------------|
+| [Make It Yours](./docs/MAKE-IT-YOURS.md) | Customize branding, colors, and content (~2 hours) |
+| [Environment Variables](./docs/env-variables.md) | Complete configuration reference |
+| [Operating Guide](./docs/OPERATING-GUIDE.md) | Production deployment best practices |
+| [Licensing](./docs/LICENSING.md) | License terms and usage rights |
 
-- Documentation: Check `/readme` route in development mode
-- Issues: [Open a GitHub issue](https://github.com/kunflow/saastarter/issues)
+---
 
-## Contributing
+## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We love contributions! Whether it's bug fixes, new features, or documentation improvements — all are welcome.
+
+Please read our [**Contributing Guide**](./CONTRIBUTING.md) before submitting a PR.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
+---
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for details.
+
+Free to use for personal and commercial projects. Attribution appreciated but not required.
+
+---
+
+<div align="center">
+
+## ⭐ Star This Repo
+
+If this project helped you, **please consider giving it a star!**  
+It helps others discover it and motivates us to keep improving.
+
+[![Star History Chart](https://api.star-history.com/svg?repos=kunflow/saastarter&type=Date)](https://star-history.com/#kunflow/saastarter&Date)
+
+**[⭐ Star on GitHub](https://github.com/kunflow/saastarter)** &nbsp;·&nbsp; **[🛒 Get Pro Version](https://kunflow.gumroad.com/l/saastarter-pro)** &nbsp;·&nbsp; **[🌐 Live Demo](https://saastarter.profilelift.pro)**
+
+---
+
+Built with ❤️ by [Kunflow](https://github.com/kunflow)
+
+</div>
